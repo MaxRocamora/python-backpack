@@ -34,15 +34,16 @@ jobs:
     - name: Test with tox
       run: tox
 
+    # copy coverage.xml from tox to path: '~/coverage.xml'
     - name: Upload coverage.xml
       if: ${{ matrix.python-version == '3.9' }}
       uses: actions/upload-artifact@v2
       with:
         name: upload tox-gh-actions-coverage
-        # path: '~/coverage.xml'
         path: ${{ github.workspace }}/coverage.xml
         if-no-files-found: warn
 
+    # upload coverage.xml to codecov
     - name: Upload coverage.xml to codecov
-      if: ${{ matrix.python-version == '3.7' }}
+      if: ${{ matrix.python-version == '3.9' }}
       uses: codecov/codecov-action@v1
