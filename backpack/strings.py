@@ -11,11 +11,12 @@ import re
 def reformat_input_string(input_string: str,
                           under_spaces: bool = True,
                           under_hyphen: bool = True) -> str:
-    ''' Reformat the user input string removes invalid chars and
-    replaces spaces and hyphens for underscores.
+    ''' Reformat the user input string.
+        leaves only alphanumeric chars
+        replaces spaces and hyphens for underscores.
 
     Args:
-        input_string (str): _description_
+        input_string (str): input string to reformat
         under_spaces (bool, optional): replaces spaces. Defaults to True.
         under_hyphen (bool, optional): replaces hyphens. Defaults to True.
 
