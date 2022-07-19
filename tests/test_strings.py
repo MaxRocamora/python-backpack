@@ -23,7 +23,9 @@ BEGIN_WITH_NUMBER_TRUE = '8blade_runner'
 BEGIN_WITH_NUMBER_FALSE = 'blade_runner'
 END_WITH_NUMBER_TRUE = 'blade_runner7'
 
+
 REFORMAT_RESULT = 'blade_runner'
+REFORMAT_REGEX = 'bla#de_runn$er'
 REFORMAT_SPACE = 'blade runner'
 REFORMAT_HYPHEN = 'blade-runner'
 REFORMAT_BOTH = 'blade runner-2049'
@@ -55,9 +57,15 @@ class Test_Errors(unittest.TestCase):
 
     def test_reformat(self):
         ''' testing module '''
+        self.assertEqual(reformat_input_string(REFORMAT_REGEX), REFORMAT_RESULT)
         self.assertEqual(reformat_input_string(REFORMAT_SPACE), REFORMAT_RESULT)
         self.assertEqual(reformat_input_string(REFORMAT_HYPHEN), REFORMAT_RESULT)
         self.assertEqual(reformat_input_string(REFORMAT_BOTH), REFORMAT_BOTH_RESULT)
+        # only regex
+        self.assertEqual(
+            reformat_input_string(
+                REFORMAT_BOTH, under_spaces=False, under_hyphen=False), REFORMAT_BOTH
+        )
 
 
 if __name__ == '__main__':
