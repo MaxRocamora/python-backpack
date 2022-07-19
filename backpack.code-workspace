@@ -41,9 +41,11 @@
 			"Maximiliano",
 			"Monokai",
 			"Parens",
+			"pipenv",
 			"pycodestyle",
 			"pylint",
 			"pytest",
+			"PYTHONPATH",
 			"Rocamora"
 		],
 	}
