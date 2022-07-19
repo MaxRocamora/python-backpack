@@ -27,3 +27,7 @@ A collection of scripts for JSON, File Operations, String Validation, Custom Err
 ## Others
 
 ---
+
+### Install
+pip install python-backpack
+
