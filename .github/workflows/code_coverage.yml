@@ -35,7 +35,7 @@ jobs:
       run: tox
 
     - name: Upload coverage.xml
-      if: ${{ matrix.python-version == '3.7' }}
+      if: ${{ matrix.python-version == '3.9' }}
       uses: actions/upload-artifact@v2
       with:
         name: upload tox-gh-actions-coverage
