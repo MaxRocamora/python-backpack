@@ -43,6 +43,7 @@
 			"Parens",
 			"pycodestyle",
 			"pylint",
+			"pytest",
 			"Rocamora"
 		],
 	}
