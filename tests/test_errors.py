@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------
-# Python-Backpack - Custom Exceptions
+# Python-Backpack - Custom Exceptions UnitTest
 # Maximiliano Rocamora / maxirocamora@gmail.com
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
