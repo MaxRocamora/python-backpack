@@ -1,18 +1,48 @@
-name: Workflow for Codecov example-python
-on: [push, pull_request]
+name: Python Tox & Coverage
+
+on:
+  - push
+  - pull_request
+
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.9, '3.10']
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run tests and collect coverage
-        run: pipenv run tox --cov
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+    - uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Display Python version
+      run: python -c "import sys; print(sys.version)"
+
+    - name: Add path to PYTHONPATH
+      run: |
+        echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions tox-pipenv pipenv
+
+    - name: Test with tox
+      run: tox
+
+    - name: Upload coverage.xml
+      if: ${{ matrix.python-version == '3.7' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: upload tox-gh-actions-coverage
+        # path: '~/coverage.xml'
+        path: ${{ github.workspace }}/coverage.xml
+        if-no-files-found: warn
+
+    - name: Upload coverage.xml to codecov
+      if: ${{ matrix.python-version == '3.7' }}
+      uses: codecov/codecov-action@v1
