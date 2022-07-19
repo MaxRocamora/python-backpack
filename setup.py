@@ -15,7 +15,7 @@ except (IOError, OSError):
 setup(
     name='python-backpack',
     version=version,
-    description='Python Utilities for json/files/strings/erros',
+    description='Python Utilities for json/files/strings/errors',
     author='Maximiliano Rocamora',
     author_email='maxirocamora@gmail.com',
     long_description=long_description,
@@ -25,7 +25,6 @@ setup(
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "License :: Freely Distributable",
