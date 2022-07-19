@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.analysis.completeFunctionParens": true,
+		"python.analysis.autoImportCompletions": false,
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": false,
+		"python.linting.pycodestyleEnabled": false,
+		"python.linting.flake8Enabled": true,
+		"python.linting.flake8Args": [
+			"--max-line-length=99",
+			"--ignore=E402",
+		],
+		"python.formatting.autopep8Args": [
+			"--max-line-length=99"
+		],
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": false,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": false
+		},
+		"editor.rulers": [
+			90
+		],
+		"editor.wordWrap": "wordWrapColumn",
+		"editor.wordWrapColumn": 99,
+		"workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
+		"workbench.colorCustomizations": {
+			"titleBar.activeBackground": "#f36edf",
+			"titleBar.activeForeground": "#0c0b0b"
+		},
+		"python.analysis.extraPaths": [],
+		"terminal.integrated.fontSize": 12,
+		"cSpell.words": [
+			"autopep",
+			"Maximiliano",
+			"Monokai",
+			"Parens",
+			"pycodestyle",
+			"pylint",
+			"Rocamora"
+		],
+	}
+}

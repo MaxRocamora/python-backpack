@@ -7,6 +7,11 @@ A collection of scripts for JSON, File Operations, String Validation
 
 ## String Validation
 
+## Custom Errors
+
++ EnvironmentVariableNotFound()
++ ApplicationNotFound()
+
 ## Others
 
 ---
