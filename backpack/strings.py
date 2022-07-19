@@ -4,8 +4,41 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-# import contextlib
-# import re
+import contextlib
+import re
+
+
+def reformat_input_string(input_string: str,
+                          under_spaces: bool = True,
+                          under_hyphen: bool = True) -> str:
+    ''' Reformat the user input string removes invalid chars and
+    replaces spaces and hyphens for underscores.
+
+    Args:
+        input_string (str): _description_
+        under_spaces (bool, optional): replaces spaces. Defaults to True.
+        under_hyphen (bool, optional): replaces hyphens. Defaults to True.
+
+    Returns:
+        str: reformatted string
+    '''
+
+    # re-encode string to valid chars
+    with contextlib.suppress(UnicodeDecodeError):
+        regex = re.sub('[^A-Za-z0-9 _-]+', '', input_string)
+
+    for char in regex:
+
+        # replacing " " for "_"
+        if under_spaces and char == ' ':
+            regex = regex.replace(' ', '_')
+
+        # replacing "-" for "_"
+        if under_hyphen and char == '-':
+            regex = regex.replace('-', '_')
+
+    return regex
+
 
 def begin_or_end_with_numbers(input_string: str) -> bool:
     ''' Returns true if the input string begins or ends with number '''
