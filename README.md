@@ -5,14 +5,19 @@
 [![Message](https://img.shields.io/badge/python--backpack-python-blue?style=flat-square&logo=appveyor)](https://github.com/MaxRocamora/python-backpack)
 
 
-# PythonBackpack
-A collection of scripts for JSON, File Operations, String Validation
+# Python-Backpack
+A collection of scripts for JSON, File Operations, String Validation, Custom Errors.  
+
 
 ## Json
 
 ## Files
 
 ## String Validation
++ reformat_input_string()
++ begin_or_end_with_numbers()
++ begin_with_number()
++ has_numbers()
 
 ## Custom Errors
 
