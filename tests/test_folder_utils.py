@@ -10,7 +10,7 @@ import unittest
 import mock
 
 from backpack.folder_utils import create_folders, browse_folder, create_folder
-from backpack.folder_utils import remove_files_in_dir
+from backpack.folder_utils import remove_files_in_dir, recursive_dir_copy
 
 mod_path = os.path.dirname(__file__)
 if mod_path not in sys.path:
@@ -23,6 +23,12 @@ FOLDERS = [os.path.join(BASE_PATH, 'ALPHA'),
            ]
 FOLDER_FILES = os.path.join(BASE_PATH, 'files')
 FILES = ['readme.txt']
+
+
+def create_file(path):
+    ''' creates a temp txt file '''
+    with open(os.path.join(path, 'temp.txt'), 'w'):
+        pass
 
 
 class Test_Errors(unittest.TestCase):
@@ -67,10 +73,25 @@ class Test_Errors(unittest.TestCase):
 
     def test_remove_dir(self):
         ''' creates a folder with files and remove it '''
-        create_folder(FOLDER_FILES)
-        with open(os.path.join(FOLDER_FILES, 'myfile.txt'), 'w'):
-            pass
-        remove_files_in_dir(FOLDER_FILES)
+        test_dir = os.path.join(BASE_PATH, 'remove_dir')
+        create_folder(test_dir)
+        create_file(test_dir)
+        remove_files_in_dir(test_dir)
+
+    def test_recursive_dir(self):
+        ''' creates a dir with sub dirs and files and copy them '''
+        test_dir = os.path.join(BASE_PATH, 'recursive_dir')
+        create_folder(test_dir)
+        create_file(test_dir)
+        sub_dir = os.path.join(test_dir, 'recursive_sub_dir')
+        create_folder(sub_dir)
+        create_file(sub_dir)
+        target_dir = os.path.join(BASE_PATH, 'recursive_target')
+        recursive_dir_copy(test_dir, target_dir)
+        # clear everything
+        remove_files_in_dir(test_dir)
+        remove_files_in_dir(sub_dir)
+        remove_files_in_dir(target_dir)
 
 
 if __name__ == '__main__':
