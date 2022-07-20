@@ -13,6 +13,7 @@ tox = "*"
 pipenv = "*"
 flake8 = "*"
 autopep8 = "*"
+mock = "*"
 
 [requires]
 python_version = "3.9"
