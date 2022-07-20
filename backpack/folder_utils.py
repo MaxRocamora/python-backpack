@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------
-# Python-Backpack - File Utilities
+# Python-Backpack - Folder Utilities
 # Maximiliano Rocamora / maxirocamora@gmail.com
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
@@ -10,7 +10,7 @@ import subprocess
 
 from backpack.logger import get_logger
 
-log = get_logger('FileUtils')
+log = get_logger('FolderUtils')
 
 
 def browse_folder(folder: str) -> bool:
@@ -62,10 +62,35 @@ def create_folder(path: str, force_empty: bool = False, verbose: bool = True):
     return True
 
 
-def remove_files_in_dir(path):
+def remove_files_in_dir(path: str):
     ''' clears all content in given directory '''
     for root, dirs, files in os.walk(path):
         for f in files:
             os.unlink(os.path.join(root, f))
         for d in dirs:
             shutil.rmtree(os.path.join(root, d))
+
+
+def recursive_dir_copy(src, dest):
+    """ Copy each file from src dir to dest dir,
+    including sub-directories. """
+
+    # make target dir
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+
+    for item in os.listdir(src):
+        file_path = os.path.join(src, item)
+
+        # if item is a file, copy it
+        if os.path.isfile(file_path):
+            shutil.copy(file_path, dest)
+        # else if item is a folder, recurse
+        elif os.path.isdir(file_path):
+            new_dest = os.path.join(dest, item)
+            try:
+                os.mkdir(new_dest)
+            except OSError:
+                pass
+            finally:
+                recursive_dir_copy(file_path, new_dest)
