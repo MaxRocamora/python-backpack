@@ -31,6 +31,8 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + ApplicationNotFound()
 
 ## Test Utils
++ time_function_decorator()
++ random_string()
 
 ## Others
 
