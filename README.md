@@ -27,14 +27,15 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + has_numbers()
 
 ## Custom Errors
-
 + EnvironmentVariableNotFound()
 + ApplicationNotFound()
+
+## Test Utils
 
 ## Others
 
 ---
 
-### Install
+### pip install
 pip install python-backpack
 
