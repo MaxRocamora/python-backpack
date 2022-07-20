@@ -6,8 +6,10 @@
 
 import os
 import sys
+import logging
 import unittest
 
+from backpack.logger import get_logger
 from backpack.version import app_name, version, VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
 
 mod_path = os.path.dirname(__file__)
@@ -25,6 +27,11 @@ class Test_Errors(unittest.TestCase):
         ''' testing module '''
         self.assertEqual(app_name, 'python-backpack')
         self.assertEqual(version, f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}')
+
+    def test_logger(self):
+        log = get_logger('test')
+        self.assertEqual(log.name, 'test')
+        self.assertEqual(log.level, logging.DEBUG)
 
 
 if __name__ == '__main__':
