@@ -1,0 +1,5 @@
+1.In this class we use a full path to avoid use of os.dirname, dirname, which
+3.Args: to be replaced! REMOVE_ME_ALSO
+ascii_file (to be replaced!)
+strings (list) strings to be replaced!
+REMOVE_ME
