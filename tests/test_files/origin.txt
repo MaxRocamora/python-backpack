@@ -1,0 +1,9 @@
+''' Opens ascii file and replaces all occurrences from strings into new_string.
+In this class we use a full path to avoid use of os.dirname, dirname, which
+causes string encode problems.
+Args: to be replaced!
+to be replaced!
+ascii_file (to be replaced!)
+strings (list) strings to be replaced!
+to be replaced!
+lore ipsum
