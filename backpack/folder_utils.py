@@ -31,7 +31,7 @@ def create_folders(folders: list, force_empty: bool = False, verbose: bool = Fal
 
     Args:
         folders (list): folder list
-        force_empty (bool, optional): _description_. Defaults to False.
+        force_empty (bool, optional): forces clearing folder content. Defaults to False.
         verbose (bool, optional):shows log. Defaults to False.
     '''
     for folder in folders:
@@ -39,12 +39,12 @@ def create_folders(folders: list, force_empty: bool = False, verbose: bool = Fal
 
 
 def create_folder(path: str, force_empty: bool = False, verbose: bool = True):
-    '''_summary_
+    '''creates a folder
 
     Args:
-        path (str): _description_
-        force_empty (bool, optional): _description_. Defaults to False.
-        verbose (bool, optional): _description_. Defaults to True.
+        path (str): folder path
+        force_empty (bool, optional): forces clearing folder content. Defaults to False.
+        verbose (bool, optional): show log. Defaults to True.
     '''
     abspath = os.path.abspath(path)
     if verbose:
@@ -71,26 +71,24 @@ def remove_files_in_dir(path: str):
             shutil.rmtree(os.path.join(root, d))
 
 
-def recursive_dir_copy(src, dest):
-    """ Copy each file from src dir to dest dir,
-    including sub-directories. """
+def recursive_dir_copy(source_path: str, target_path: str):
+    ''' Copy all files src dir to dest dir, including sub-directories.
 
-    # make target dir
-    if not os.path.exists(dest):
-        os.makedirs(dest)
+    Args:
+        source_path (str): source path
+        target_path (str): destination path
+    '''
 
-    for item in os.listdir(src):
-        file_path = os.path.join(src, item)
+    create_folder(source_path)
+    create_folder(target_path)
+
+    for item in os.listdir(source_path):
+        file_path = os.path.join(source_path, item)
 
         # if item is a file, copy it
         if os.path.isfile(file_path):
-            shutil.copy(file_path, dest)
+            shutil.copy(file_path, target_path)
         # else if item is a folder, recurse
         elif os.path.isdir(file_path):
-            new_dest = os.path.join(dest, item)
-            try:
-                os.mkdir(new_dest)
-            except OSError:
-                pass
-            finally:
-                recursive_dir_copy(file_path, new_dest)
+            new_dest = os.path.join(target_path, item)
+            recursive_dir_copy(file_path, new_dest)
