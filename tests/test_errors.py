@@ -32,10 +32,6 @@ def get_app(name: str):
 
 class Test_Errors(unittest.TestCase):
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
     def test_env_var_error(self):
         ''' testing module '''
         self.assertRaises(EnvironmentVariableNotFound, get_env_var, 'my_env_var')

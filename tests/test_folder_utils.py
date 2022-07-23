@@ -33,11 +33,10 @@ def create_file(path):
 
 class Test_Errors(unittest.TestCase):
 
-    @classmethod
-    def tearDownClass(cls):
+    def setUp(self):
         pass
 
-    def test_folders(self):
+    def test_create_folders(self):
         ''' testing module '''
         create_folders(FOLDERS, verbose=True)
         # check folders and files exists
@@ -53,7 +52,7 @@ class Test_Errors(unittest.TestCase):
             self.assertEqual(os.path.exists(f), True)
 
         # test osError
-        create_folder('X:/force_oserror')
+        create_folder('X:/tests/force_oserror')
 
         # test force_empty, calling twice to ensure folder existence
         create_folders(FOLDERS, verbose=True, force_empty=False)
@@ -67,7 +66,6 @@ class Test_Errors(unittest.TestCase):
         # mocked Popen, create folder, browse, delete
         create_folder(FOLDERS[0])
         browse_folder(FOLDERS[0])
-        remove_files_in_dir(BASE_PATH)
         # force false
         browse_folder(None)
 
