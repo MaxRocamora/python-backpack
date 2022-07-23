@@ -59,3 +59,19 @@ def remove_line_from_file(ascii_file: str, strings: str):
     with open(ascii_file, "w") as f:
         contents = "\n".join(file_content)
         f.write(contents)
+
+
+def file_is_writeable(filepath: str) -> bool:
+    ''' checks if a file is locked and can be overwritten
+    Args:
+        filepath (str)) file to check
+    Returns:
+        bool : true if file is writeable
+    '''
+    try:
+        with open(filepath, 'r+') as _:
+            return True
+    except OSError as x:
+        log.warning(f'{filepath} is locked ')
+        log.info(x.strerror)
+    return False
