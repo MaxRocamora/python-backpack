@@ -47,7 +47,8 @@
 			"pytest",
 			"PYTHONPATH",
 			"Rocamora",
-			"runn"
+			"runn",
+			"strerror"
 		],
 	}
 }
