@@ -6,10 +6,12 @@
 
 
 # Python-Backpack
-A collection of personal scripts for JSON, File/Folder Operations, String Validation, Custom Errors.  
+A collection of personal scripts for JSON, File/Folder Operations, String Validation, Custom Errors, and stuff.  
 
 
 ## Json
++ json_load()
++ json_save()
 
 ## Files & Folders
 + browse_folder()
@@ -19,6 +21,7 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + recursive_dir_copy()
 + replace_strings_in_file()
 + remove_line_from_file()
++ file_is_writeable()
 
 ## String Validation
 + reformat_input_string()
@@ -35,6 +38,7 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + random_string()
 
 ## Others
++ Singleton()
 
 ---
 
