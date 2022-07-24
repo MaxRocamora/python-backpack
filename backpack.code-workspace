@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"python.analysis.completeFunctionParens": true,
+		"python.analysis.completeFunctionParens": false,
 		"python.analysis.autoImportCompletions": false,
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": false,
@@ -38,6 +38,8 @@
 		"cSpell.words": [
 			"autopep",
 			"codecov",
+			"ftime",
+			"jsonfile",
 			"Maximiliano",
 			"Monokai",
 			"Parens",
