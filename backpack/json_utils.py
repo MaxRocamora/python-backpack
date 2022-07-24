@@ -40,5 +40,7 @@ def json_save(data: dict, json_file: str):
             json.dump(data, f, sort_keys=True, indent=4)
             return True
 
-    except OSError as e:
+    except (OSError, TypeError) as e:
         log.error(f'{e} - {json_file}')
+
+    return False
