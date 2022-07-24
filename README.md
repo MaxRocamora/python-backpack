@@ -12,6 +12,8 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 ## Json
 + json_load()
 + json_save()
++ jsonMetaFile()
++ jsonUserSettings()
 
 ## Files & Folders
 + browse_folder()
