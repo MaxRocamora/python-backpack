@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 tox = "*"
 tox-pipenv = "*"
+twine = "*"
 
 [dev-packages]
 twine = "*"
