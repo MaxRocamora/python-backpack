@@ -37,6 +37,7 @@
 		"terminal.integrated.fontSize": 12,
 		"cSpell.words": [
 			"autopep",
+			"camelcase",
 			"codecov",
 			"ftime",
 			"jsonfile",
@@ -50,7 +51,12 @@
 			"PYTHONPATH",
 			"Rocamora",
 			"runn",
+			"snakecase",
 			"strerror"
 		],
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.autopep8"
+		},
+		"python.formatting.provider": "none",
 	}
 }
