@@ -4,16 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+tox = "*"
+tox-pipenv = "*"
 
 [dev-packages]
 twine = "*"
-tox-pipenv = "*"
 coverage = "*"
-tox = "*"
 pipenv = "*"
 flake8 = "*"
 autopep8 = "*"
 mock = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
