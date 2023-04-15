@@ -1,0 +1,63 @@
+[tox]
+requires =
+	pipenv
+	tox-pipenv
+
+envlist = p311, coverage
+
+ignore_basepython_conflict = true
+skipsdist = true
+skip_missing_interpreters = true
+
+[gh-actions]
+python =
+    3.9: p39, coverage
+
+[testenv]
+basepython = python3.11
+allowlist_externals = 
+ 	python
+ 	pipenv
+ 	tox-pipenv
+ 	unittest
+ 	pytest
+ 	codecov
+	mock
+deps = 
+	pipenv
+	tox-pipenv
+	unittest
+	pytest
+	codecov
+	mock
+commands = codecov
+
+[testenv:p39]
+description = Test on Python 3.9
+basepython = python3.9
+commands =
+	pipenv run python --version
+	pipenv run python  tests/test_strings.py
+    pipenv run python  tests/test_errors.py
+	pipenv run python  tests/test_misc.py
+	pipenv run python  tests/test_folder_utils.py
+	pipenv run python  tests/test_file_utils.py
+	pipenv run python  tests/test_test_utils.py
+	pipenv run python  tests/test_json_utils.py
+	pipenv run python  tests/test_jsonmd.py
+	pipenv run python  tests/test_json_user_settings.py
+
+[testenv:coverage]
+description = Test Code Coverage on Python 3.11
+basepython = python3.11
+deps =
+	pytest
+	pytest-cov
+	coverage
+	tox_gh_actions
+	mock
+commands =
+    coverage run --source=backpack -m pytest
+    coverage report -m --fail-under=70
+    coverage html
+	coverage xml
