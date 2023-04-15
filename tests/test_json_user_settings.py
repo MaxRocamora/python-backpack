@@ -38,9 +38,9 @@ class Test_windows(unittest.TestCase):
     def test_json_user_settings(self):
 
         # make sure folder does not exist
-        with contextlib.suppress(PermissionError):
+        with contextlib.suppress(PermissionError, OSError):
             if os.path.exists(TEST_FOLDER):
-                os.remove(TEST_FOLDER)
+                os.removedirs(TEST_FOLDER)
 
         # class and properties
         js = JsonUserSettings(FOLDER, 'user')
