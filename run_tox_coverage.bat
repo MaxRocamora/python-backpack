@@ -1,0 +1,1 @@
+tox r -e coverage
