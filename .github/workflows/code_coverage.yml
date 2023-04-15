@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10']
+        python-version: ['3.11']
 
     steps:
     - uses: actions/checkout@v1
@@ -29,14 +29,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install tox tox-gh-actions tox-pipenv pipenv
+        pip install tox tox-gh-actions pipenv
 
     - name: Test with tox
       run: tox
 
     # copy coverage.xml from tox to path: '~/coverage.xml'
     - name: Upload coverage.xml
-      if: ${{ matrix.python-version == '3.9' }}
+      if: ${{ matrix.python-version == '3.11' }}
       uses: actions/upload-artifact@v2
       with:
         name: upload tox-gh-actions-coverage
@@ -45,5 +45,5 @@ jobs:
 
     # upload coverage.xml to codecov
     - name: Upload coverage.xml to codecov
-      if: ${{ matrix.python-version == '3.9' }}
+      if: ${{ matrix.python-version == '3.11' }}
       uses: codecov/codecov-action@v1
