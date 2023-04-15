@@ -30,6 +30,7 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + begin_or_end_with_numbers()
 + begin_with_number()
 + has_numbers()
++ camelcase_to_snakecase()
 
 ## Custom Errors
 + EnvironmentVariableNotFound()
@@ -39,7 +40,7 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 + time_function_decorator()
 + random_string()
 
-## Others
+## Others / Patterns
 + Singleton()
 
 ---
