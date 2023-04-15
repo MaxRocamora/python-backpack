@@ -71,3 +71,45 @@ def _char_is_number(char: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+def camelcase_to_snakecase(input_string: str) -> str:
+    ''' Convert a CamelCase string to snake_case string.
+
+    Args:
+        input_string (str): The CamelCase string to be converted.
+
+    Returns:
+        str: The converted snake_case string.
+
+    Examples:
+        OneDayCaseChar > one_day_case_char
+        oneCamelCaseChar > one_camel_case_char
+        _TwoCamel_CaseChar > _two_camel_case_char
+        _LeadingUnderscore_case_ > _leading_underscore_case_
+    '''
+
+    snake_str = ''
+
+    # iterate over the string
+    for index, char in enumerate(input_string):
+
+        if not char.isalnum():
+            snake_str += char
+            continue
+
+        if char.isupper() and index == 0:
+            snake_str += char.lower()
+            continue
+
+        if char.isupper():
+            if input_string[index - 1] != '_':
+                snake_str += '_' + char.lower()
+            else:
+                snake_str += char.lower()
+
+            continue
+
+        snake_str += char
+
+    return snake_str
