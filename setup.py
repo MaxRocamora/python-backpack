@@ -24,7 +24,10 @@ setup(
     license='GNU GENERAL PUBLIC LICENSE',
     packages=find_packages(),
     classifiers=[
-        "Programming Language :: Python >= 3.7",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: Freely Distributable",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
