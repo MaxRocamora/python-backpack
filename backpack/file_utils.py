@@ -8,10 +8,10 @@ import contextlib
 
 from backpack.logger import get_logger
 
-log = get_logger('FileUtils')
+log = get_logger('Python Backpack - FileUtils')
 
 
-def replace_strings_in_file(ascii_file: str, strings: list, new_string: str):
+def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> None:
     ''' Opens ascii file and replaces all occurrences from strings into new_string.
     In this class we use a full path to avoid use of os.dirname, which
     causes string encode problems.
@@ -40,7 +40,7 @@ def replace_strings_in_file(ascii_file: str, strings: list, new_string: str):
         log.info(f"Closing File: {ascii_file}")
 
 
-def remove_line_from_file(ascii_file: str, strings: str):
+def remove_line_from_file(ascii_file: str, strings: str) -> None:
     ''' removes given lines from ascii file.
     Args:
         ascii_file (path) ASCII file to process
@@ -74,4 +74,5 @@ def file_is_writeable(filepath: str) -> bool:
     except OSError as x:
         log.warning(f'{filepath} is locked ')
         log.info(x.strerror)
+
     return False
