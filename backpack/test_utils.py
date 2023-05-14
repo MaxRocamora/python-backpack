@@ -9,7 +9,7 @@ import string
 
 from backpack.logger import get_logger
 
-log = get_logger('TestUtils')
+log = get_logger('Python Backpack - TestUtils')
 
 
 def random_string(length: str = 10) -> str:
@@ -26,8 +26,9 @@ def random_string(length: str = 10) -> str:
     return ''.join(random.choice(letters) for _ in range(length))
 
 
-def time_function_decorator(method):
+def time_function_decorator(method: type):
     ''' decorator to measure methods execution time '''
+
     def timed(*args, **kw):
         ts = time.time()
         result = method(*args, **kw)
@@ -35,5 +36,7 @@ def time_function_decorator(method):
 
         message = f'{method.__name__!r}  {(te - ts) * 1000:2.2f} ms'
         log.info(message)
+
         return result
+
     return timed
