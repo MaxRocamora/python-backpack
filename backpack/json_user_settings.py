@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 # Json Settings Class
 # This class handle load/save json files on win/linux local user folder
 ''' Usage:
@@ -8,17 +7,17 @@ us.save(someDict)
 data = us.load()
 
 '''
-# --------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------
 import os
 
 from backpack.logger import get_logger
 from backpack.json_utils import json_save, json_load
 
-log = get_logger('UserSettings')
+log = get_logger('Python Backpack - UserSettings')
 
 
 class JsonUserSettings():
-    def __init__(self, folder: str, name: str):
+    def __init__(self, folder: str, name: str) -> None:
         '''Manages saving/loading json file on local user folder
 
         Args:
@@ -31,33 +30,34 @@ class JsonUserSettings():
         self._verify_path()
 
     @property
-    def filepath(self):
+    def filepath(self) -> str:
         ''' Returns user filepath '''
-        path = os.path.join(self.os_user_folder, self.folder, self.name + '.json')
+        path = os.path.join(self.os_user_folder, self.folder, f'{self.name}.json')
         return os.path.abspath(path)
 
     @property
-    def os_user_folder(self):
+    def os_user_folder(self) -> str:
         ''' returns os users home directory '''
         return os.path.expanduser('~')
 
     @property
-    def user_data(self):
+    def user_data(self) -> dict:
         ''' override this property to modify saving dict '''
         return self._user_data
 
     @user_data.setter
-    def user_data(self, v):
+    def user_data(self, v: dict) -> None:
         self._user_data = v
 
-    def _verify_path(self):
+    def _verify_path(self) -> bool:
         ''' Checks for target directory or make it '''
         path = os.path.dirname(self.filepath)
         if not os.path.exists(path):
             os.makedirs(path)
+
         return True
 
-    def save_settings(self, data=False):
+    def save_settings(self, data=False) -> bool:
         ''' Saves a dictionary into a json file (os user path)
         Args:
             data (dictionary) : info dictionary to save, if set to False,
@@ -71,7 +71,7 @@ class JsonUserSettings():
             log.info('json settings file saved! [%s]', self.filepath)
         return r
 
-    def load_settings(self):
+    def load_settings(self) -> dict:
         ''' Load json file from path and returns its contents '''
         try:
             return json_load(self.filepath)
