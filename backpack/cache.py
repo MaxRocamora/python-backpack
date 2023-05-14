@@ -31,7 +31,7 @@ def timed_lru_cache(seconds: int, maxsize: int = 128):
         def my_function():
             return 'Hello World'
 
-        # * to clear the cache, use force_clear=True on th function call
+        # * to clear the cache, use force_clear=True on the function call
         my_function(force_clear=True)
 
     '''
