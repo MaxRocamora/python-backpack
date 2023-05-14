@@ -13,7 +13,7 @@ class EnvironmentVariableNotFound(Exception):
             var_name (str): name of the required variable missing
         '''
         self.var_name = var_name
-        self.message = f'System required ({var_name}) Environment Variable not found.'
+        self.message = f'Required Environment Variable [{var_name}] not found.'
         super().__init__(self.message)
 
     def __str__(self):
