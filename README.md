@@ -6,7 +6,7 @@
 
 
 # Python-Backpack
-A collection of personal scripts for JSON, File/Folder Operations, String Validation, Custom Errors, and stuff.  
+A collection of personal scripts for JSON, File/Folder Operations, String Validation, Custom Errors, Cache and stuff.  
 
 
 ## Json
@@ -35,6 +35,9 @@ A collection of personal scripts for JSON, File/Folder Operations, String Valida
 ## Custom Errors
 + EnvironmentVariableNotFound()
 + ApplicationNotFound()
+
+## Cache
++ timed_lru_cache
 
 ## Test Utils
 + time_function_decorator()
