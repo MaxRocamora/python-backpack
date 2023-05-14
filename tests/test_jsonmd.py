@@ -43,7 +43,7 @@ class Test_windows(unittest.TestCase):
         meta.insert(key='coins', value=12)
 
         # check if data have coins and value 12
-        self.assertEqual(meta.data['coins'], 12)
+        self.assertEqual(meta._data['coins'], 12)
 
         meta.save()
 
@@ -56,10 +56,10 @@ class Test_windows(unittest.TestCase):
         meta.insert('coins', 7)
 
         # check if data have coins and value 7
-        self.assertEqual(meta.data['coins'], 7)
+        self.assertEqual(meta._data['coins'], 7)
 
         meta.remove('coins')
-        self.assertEqual(meta.data.get('coins', None), None)
+        self.assertEqual(meta._data.get('coins', None), None)
 
         meta.insert(key='items', value=ATTRIBUTES)
         meta.save()
@@ -81,8 +81,8 @@ class Test_windows(unittest.TestCase):
 
         proxyClass = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
         meta.insert_class(proxyClass)
-        self.assertEqual(meta.data['foo'], 12)
-        self.assertEqual(meta.data['items'], ATTRIBUTES)
+        self.assertEqual(meta._data['foo'], 12)
+        self.assertEqual(meta._data['items'], ATTRIBUTES)
         meta.save()
 
 
