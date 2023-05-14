@@ -39,6 +39,7 @@
 			"autopep",
 			"camelcase",
 			"codecov",
+			"docstrings",
 			"ftime",
 			"jsonfile",
 			"Maximiliano",
