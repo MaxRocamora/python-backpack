@@ -3,7 +3,7 @@ import json
 
 from backpack.logger import get_logger
 
-log = get_logger('JsonUtils')
+log = get_logger('Python Backpack - JsonUtils')
 
 
 def json_load(json_file: str) -> dict:
@@ -22,14 +22,17 @@ def json_load(json_file: str) -> dict:
         except ValueError as e:
             json_file_opened.close()
             raise OSError(f"{json_file} \n JSON File issue: {str(e)}") from e
+
     return value
 
 
-def json_save(data: dict, json_file: str):
+def json_save(data: dict, json_file: str) -> bool:
     ''' Saves a dictionary into a json file
     Args:
         data (dict) : dictionary to save
         json_file (filepath) json file to save data.
+    Returns:
+        bool (True if success)
     '''
 
     if not os.path.exists(os.path.dirname(json_file)):
