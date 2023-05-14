@@ -10,7 +10,7 @@ import subprocess
 
 from backpack.logger import get_logger
 
-log = get_logger('FolderUtils')
+log = get_logger('Python Backpack - FolderUtils')
 
 
 def browse_folder(folder: str) -> bool:
