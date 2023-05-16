@@ -127,4 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# test generated files
 tests/test_json/MD_test.json
