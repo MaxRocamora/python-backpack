@@ -1,21 +1,13 @@
-import os
-import io
 from backpack.version import version
 from setuptools import setup, find_packages
 
-# Import the README and use it as the long-description.
-# Note: this will only work if 'README.md' is present in your MANIFEST.in file!
-here = os.path.abspath(os.path.dirname(__file__))
-try:
-    with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-        long_description = '\n' + f.read()
-except (IOError, OSError):
-    long_description = ""
+with open('README.md', 'r', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='python-backpack',
     version=version,
-    description='Python Utilities for json/files/strings/errors',
+    description='Python Utilities',
     author='Maximiliano Rocamora',
     author_email='maxirocamora@gmail.com',
     long_description=long_description,
@@ -28,9 +20,18 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "License :: Freely Distributable",
+        "License :: GNU General Public License (GPL)",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules"
     ],
-    python_requires='>=3.7'
+    python_requires='>=3.7',
+    package_data={
+        '': ['README.md'],
+    },
+    include_package_data=True,
+    test_suite='tests',
+    project_urls={
+        'Source': 'https://github.com/MaxRocamora/python-backpack',
+    },
 )
