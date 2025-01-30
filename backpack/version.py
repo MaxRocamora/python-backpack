@@ -4,11 +4,12 @@
 # 1.0.3 07/2022 - JsonMetaFile, JsonUserSettings
 # 1.0.4 04/2023 - Added camelcase_to_snakecase function
 # 1.0.5 05/2023 - Refactor JsonMetaFile, Added Cache, Some type hints / docstrings
+# 1.1.0 01/2024 - Ruff Formatting
 # ----------------------------------------------------------------------------------------
 
 VERSION_MAJOR = 1
-VERSION_MINOR = 0
-VERSION_PATCH = 5
+VERSION_MINOR = 1
+VERSION_PATCH = 0
 
 version = f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}'
 
