@@ -5,8 +5,9 @@
 # ----------------------------------------------------------------------------------------
 
 
-class Singleton():
-    ''' Python Singleton BaseClass
+class Singleton:
+    """Python Singleton BaseClass.
+
     Usage:
 
         class MyClass(Singleton, otherClass):
@@ -14,11 +15,12 @@ class Singleton():
 
         obj = MyClass() # any new object will be taken from the same instance
 
-    '''
+    """
 
     _instance = None
 
     def __new__(cls, *args, **kwargs):
+        """Singleton __new__ method."""
         if not isinstance(cls._instance, cls):
             # print(f'Initializing {cls.__name__}')
             cls._instance = object.__new__(cls)
