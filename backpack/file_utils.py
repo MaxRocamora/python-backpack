@@ -12,19 +12,21 @@ log = get_logger('Python Backpack - FileUtils')
 
 
 def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> None:
-    ''' Opens ascii file and replaces all occurrences from strings into new_string.
+    """Opens ascii file and replaces all occurrences from strings into new_string.
+
     In this class we use a full path to avoid use of os.dirname, which
     causes string encode problems.
+
     Args:
-        ascii_file (fullpath) file to open
-        strings (list) strings to replace
-        new_string (string) new string or path to set
-    '''
+        ascii_file: (fullpath string) file to open
+        strings: (list) strings to replace
+        new_string: (string) new string or path to set
+    """
 
     # force forward slashes
-    new_string = new_string.replace("\\", "/")
+    new_string = new_string.replace('\\', '/')
 
-    log.info(f"Replacing Strings, Opening File: {ascii_file}")
+    log.info(f'Replacing Strings, Opening File: {ascii_file}')
 
     with open(ascii_file) as f:
         file_data = f.read()
@@ -37,15 +39,16 @@ def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> 
     with open(ascii_file, 'w') as f:
         f.write(file_data)
         f.close()
-        log.info(f"Closing File: {ascii_file}")
+        log.info(f'Closing File: {ascii_file}')
 
 
-def remove_line_from_file(ascii_file: str, strings: str) -> None:
-    ''' removes given lines from ascii file.
+def remove_line_from_file(ascii_file: str, strings: list) -> None:
+    """Removes given lines from ascii file.
+
     Args:
-        ascii_file (path) ASCII file to process
-        strings (list) match lines to remove
-    '''
+        ascii_file: (string path) ASCII file to process
+        strings: (list) match lines to remove
+    """
 
     with open(ascii_file) as f:
         file_content = f.read().splitlines()
@@ -56,18 +59,19 @@ def remove_line_from_file(ascii_file: str, strings: str) -> None:
             if line in strings:
                 file_content.pop(file_content.index(line))
 
-    with open(ascii_file, "w") as f:
-        contents = "\n".join(file_content)
+    with open(ascii_file, 'w') as f:
+        contents = '\n'.join(file_content)
         f.write(contents)
 
 
 def file_is_writeable(filepath: str) -> bool:
-    ''' checks if a file is locked and can be overwritten
+    """Checks if a file is locked and can be overwritten.
+
     Args:
-        filepath (str)) file to check
+        filepath: (str) file to check
     Returns:
         bool : true if file is writeable
-    '''
+    """
     try:
         with open(filepath, 'r+') as _:
             return True
