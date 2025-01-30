@@ -3,62 +3,59 @@
 # Maximiliano Rocamora / maxirocamora@gmail.com
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
-import sys
-import os
-import time
 import inspect
-from datetime import datetime
+import os
 import platform
+import sys
+import time
+from datetime import datetime
 from typing import Any
 
 from backpack.json_utils import json_load, json_save
 from backpack.version import version
 
 
-class JsonMetaFile():
-
-    PREFIX = "MD_"
+class JsonMetaFile:
+    PREFIX = 'MD_'
 
     def __init__(self, name: str, path: str) -> None:
-        '''saves/load a class/dict as a json metadata file
+        """saves/load a class/dict as a json metadata file.
 
         Args:
             name (str): name of the file/class
             path (str, optional): filepath. Defaults to None.
-        '''
+        """
         self._name = name
         self._path = path
-        self._data = {
-            "_about": {'package': 'python-backpack', 'version': self.version}
-        }
+        self._data = {'_about': {'package': 'python-backpack', 'version': self.version}}
 
     @property
     def name(self) -> str:
-        ''' name of this metadata class'''
+        """Name of this metadata class."""
         return self._name
 
     @property
     def version(self) -> str:
-        ''' version of this metadata class'''
+        """Version of this metadata class."""
         return version
 
     @property
     def filename(self) -> str:
-        ''' Returns default filename with prefix and extension '''
+        """Returns default filename with prefix and extension."""
         return self.PREFIX + self.name + '.json'
 
     @property
     def filepath(self) -> str:
-        ''' full json metadata filepath '''
+        """Full json metadata filepath."""
         return os.path.join(self.path, self.filename)
 
     @property
     def path(self) -> str:
-        ''' base path location of metadata json file '''
+        """Base path location of metadata json file."""
         return self._path
 
     def has_file(self) -> bool:
-        ''' returns true if file exists '''
+        """Returns true if file exists."""
         return os.path.exists(self.filepath)
 
     # ------------------------------------------------------------------------------------
@@ -66,20 +63,20 @@ class JsonMetaFile():
     # ------------------------------------------------------------------------------------
 
     def load(self) -> None:
-        ''' loads metadata from disk '''
+        """Loads metadata from disk."""
         self._data = json_load(self.filepath) if self.has_file() else {}
 
     def insert(self, key: str, value: Any) -> None:
-        ''' inserts value into metadata '''
+        """Inserts value into metadata."""
         self._data[key] = value
 
     def remove(self, key: str) -> None:
-        ''' remove key from metadata '''
+        """Remove key from metadata."""
         if key in self._data.keys():
             del self._data[key]
 
     def save(self) -> None:
-        ''' Save current metadata into json file. '''
+        """Save current metadata into json file."""
         if not os.path.exists(self.path):
             os.makedirs(self.path)
 
@@ -91,12 +88,12 @@ class JsonMetaFile():
     # ------------------------------------------------------------------------------------
 
     def load_as_class(self) -> type:
-        ''' returns the metadata dict as a class obj '''
-        metadataClass = type(self.name, (), self._data)
-        return metadataClass
+        """Returns the metadata dict as a class obj."""
+        metadata_class = type(self.name, (), self._data)
+        return metadata_class
 
     def insert_class(self, _class: type) -> None:
-        ''' load all attributes from  a  given class into this class metadata '''
+        """Load all attributes from  a  given class into this class metadata."""
         attributes = {}
         for name in dir(_class):
             value = getattr(_class, name)
@@ -110,7 +107,7 @@ class JsonMetaFile():
     # ------------------------------------------------------------------------------------
 
     def _system_data(self) -> dict:
-        ''' add system metadata to the default data before save '''
+        """Add system metadata to the default data before save."""
         return {
             'name': self.name,
             'app': os.path.basename(sys.executable),
@@ -121,15 +118,15 @@ class JsonMetaFile():
         }
 
     def _current_time_metadata(self) -> dict:
-        ''' Get export time info. '''
-        ftime = time.strftime("%Y,%b,%d,%j,%H:%M", time.localtime())
-        times = ftime.split(",")
+        """Get export time info."""
+        ftime = time.strftime('%Y,%b,%d,%j,%H:%M', time.localtime())
+        times = ftime.split(',')
         td = {
-            "year": times[0],
-            "month": times[1],
-            "day": times[2],
-            "year_day": times[3],
-            "time": times[4],
-            'save_time': datetime.now().ctime()
+            'year': times[0],
+            'month': times[1],
+            'day': times[2],
+            'year_day': times[3],
+            'time': times[4],
+            'save_time': datetime.now().ctime(),
         }
         return td
