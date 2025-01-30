@@ -3,9 +3,9 @@
 # Maximiliano Rocamora / maxirocamora@gmail.com
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
-import time
 import random
 import string
+import time
 
 from backpack.logger import get_logger
 
@@ -13,21 +13,21 @@ log = get_logger('Python Backpack - TestUtils')
 
 
 def random_string(length: str = 10) -> str:
-    '''Generates a random string of fixed length
+    """Generates a random string of fixed length.
 
     Args:
         length (int, optional): max string length. Defaults to 10.
 
     Returns:
         str: random string
-    '''
+    """
 
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for _ in range(length))
 
 
 def time_function_decorator(method: type):
-    ''' decorator to measure methods execution time '''
+    """Decorator to measure methods execution time."""
 
     def timed(*args, **kw):
         ts = time.time()
