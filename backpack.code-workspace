@@ -15,8 +15,9 @@
 		"editor.rulers": [
 			90
 		],
+		"editor.defaultFormatter": "charliermarsh.ruff",
 		"editor.wordWrap": "wordWrapColumn",
-		"editor.wordWrapColumn": 99,
+		"editor.wordWrapColumn": 120,
 		"workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
 		"workbench.colorCustomizations": {
 			"titleBar.activeBackground": "#f36edf",
@@ -35,9 +36,11 @@
 			"levelname",
 			"Maximiliano",
 			"Monokai",
+			"numpy",
 			"Parens",
 			"pipenv",
 			"pycodestyle",
+			"pydocstyle",
 			"pylint",
 			"pypi",
 			"pytest",
@@ -47,8 +50,5 @@
 			"snakecase",
 			"strerror"
 		],
-		"[python]": {
-			"editor.defaultFormatter": "charliermarsh.ruff"
-		},
 	}
 }
