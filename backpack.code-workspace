@@ -7,21 +7,10 @@
 	"settings": {
 		"python.analysis.completeFunctionParens": false,
 		"python.analysis.autoImportCompletions": false,
-		"python.linting.enabled": true,
-		"python.linting.pylintEnabled": false,
-		"python.linting.pycodestyleEnabled": false,
-		"python.linting.flake8Enabled": true,
-		"python.linting.flake8Args": [
-			"--max-line-length=99",
-			"--ignore=E402",
-		],
-		"python.formatting.autopep8Args": [
-			"--max-line-length=99"
-		],
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": false,
 		"editor.codeActionsOnSave": {
-			"source.organizeImports": false
+			"source.organizeImports": "never"
 		},
 		"editor.rulers": [
 			90
@@ -38,16 +27,19 @@
 		"cSpell.words": [
 			"autopep",
 			"camelcase",
+			"charliermarsh",
 			"codecov",
 			"docstrings",
 			"ftime",
 			"jsonfile",
+			"levelname",
 			"Maximiliano",
 			"Monokai",
 			"Parens",
 			"pipenv",
 			"pycodestyle",
 			"pylint",
+			"pypi",
 			"pytest",
 			"PYTHONPATH",
 			"Rocamora",
@@ -56,11 +48,7 @@
 			"strerror"
 		],
 		"[python]": {
-			"editor.defaultFormatter": "ms-python.autopep8"
+			"editor.defaultFormatter": "charliermarsh.ruff"
 		},
-		"python.formatting.provider": "none",
-		"autopep8.args": [
-			"--max-line-length=99"
-		],
 	}
 }
