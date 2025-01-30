@@ -2,7 +2,7 @@ import logging
 
 
 def get_logger(name: str):
-    ''' basic log'''
+    """Returns a logger object with a stream handler."""
     _log = logging.getLogger(name)
     _log.propagate = False
     _log.setLevel(logging.DEBUG)
