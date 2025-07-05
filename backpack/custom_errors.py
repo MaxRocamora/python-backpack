@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------------------------
 
 
-class EnvironmentVariableNotFound(Exception):
+class EnvironmentVariableNotFoundError(Exception):
     def __init__(self, var_name: str) -> None:
         """Error Raised when a required environment variable is missing from os.
 
@@ -21,7 +21,7 @@ class EnvironmentVariableNotFound(Exception):
         return self.message
 
 
-class ApplicationNotFound(Exception):
+class ApplicationNotFoundError(Exception):
     def __init__(self, app_name: str) -> None:
         """Error Raised when an Application Name required is not found.
 
