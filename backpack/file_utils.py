@@ -42,21 +42,25 @@ def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> 
         log.info(f'Closing File: {ascii_file}')
 
 
-def remove_line_from_file(ascii_file: str, strings: list) -> None:
+def remove_line_from_file(ascii_file: str, strings: list, verbose: bool = False) -> None:
     """Removes given lines from ascii file.
 
     Args:
         ascii_file: (string path) ASCII file to process
         strings: (list) match lines to remove
+        verbose: (bool) if true, prints removed lines
     """
 
     with open(ascii_file) as f:
         file_content = f.read().splitlines()
 
     for line in file_content:
-        print('file line', line)
+        if verbose:
+            log.info(f'Checking line: {line}')
         with contextlib.suppress(ValueError):
             if line in strings:
+                if verbose:
+                    log.info(f'Removing line: {line}')
                 file_content.pop(file_content.index(line))
 
     with open(ascii_file, 'w') as f:
