@@ -21,9 +21,9 @@ JSON_SAVE_FILE = os.path.join(mod_path, 'test_json', 'save', 'data_saved.json')
 BROKEN_JSON_FILE = os.path.join(mod_path, 'test_json', 'data_broken.json')
 
 
-class Test_Errors(unittest.TestCase):
-
+class TestErrors(unittest.TestCase):
     def test_json_load(self):
+        """Test json_load function."""
         data = json_load(JSON_LOAD_FILE)
         self.assertTrue(type(data), dict)
         self.assertTrue(data.get('user'), 'Max')
@@ -31,6 +31,7 @@ class Test_Errors(unittest.TestCase):
         self.assertRaises(OSError, json_load, BROKEN_JSON_FILE)
 
     def test_json_save(self):
+        """Test json_save function."""
         data = {'name': 'max'}
         r = json_save(data, JSON_SAVE_FILE)
         self.assertTrue(r)

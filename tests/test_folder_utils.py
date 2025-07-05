@@ -7,10 +7,16 @@
 import os
 import sys
 import unittest
+
 import mock
 
-from backpack.folder_utils import create_folders, browse_folder, create_folder
-from backpack.folder_utils import remove_files_in_dir, recursive_dir_copy
+from backpack.folder_utils import (
+    browse_folder,
+    create_folder,
+    create_folders,
+    recursive_dir_copy,
+    remove_files_in_dir,
+)
 
 mod_path = os.path.dirname(__file__)
 if mod_path not in sys.path:
@@ -18,26 +24,23 @@ if mod_path not in sys.path:
 
 # test folders
 BASE_PATH = os.path.join(mod_path, 'test_folder')
-FOLDERS = [os.path.join(BASE_PATH, 'ALPHA'),
-           os.path.join(BASE_PATH, 'BETA'),
-           ]
+FOLDERS = [
+    os.path.join(BASE_PATH, 'ALPHA'),
+    os.path.join(BASE_PATH, 'BETA'),
+]
 FOLDER_FILES = os.path.join(BASE_PATH, 'files')
 FILES = ['readme.txt']
 
 
 def create_file(path):
-    ''' creates a temp txt file '''
+    """Creates a temp txt file."""
     with open(os.path.join(path, 'temp.txt'), 'w'):
         pass
 
 
-class Test_Errors(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
+class TestErrors(unittest.TestCase):
     def test_create_folders(self):
-        ''' testing module '''
+        """Testing module."""
         create_folders(FOLDERS, verbose=True)
         # check folders and files exists
         for f in FOLDERS:
@@ -63,6 +66,7 @@ class Test_Errors(unittest.TestCase):
 
     @mock.patch('subprocess.Popen')
     def test_browse(self, mock_browse):
+        """Testing module."""
         # mocked Popen, create folder, browse, delete
         create_folder(FOLDERS[0])
         browse_folder(FOLDERS[0])
@@ -70,14 +74,14 @@ class Test_Errors(unittest.TestCase):
         browse_folder(None)
 
     def test_remove_dir(self):
-        ''' creates a folder with files and remove it '''
+        """Creates a folder with files and remove it."""
         test_dir = os.path.join(BASE_PATH, 'remove_dir')
         create_folder(test_dir)
         create_file(test_dir)
         remove_files_in_dir(test_dir)
 
     def test_recursive_dir(self):
-        ''' creates a dir with sub dirs and files and copy them '''
+        """Creates a dir with sub dirs and files and copy them."""
         test_dir = os.path.join(BASE_PATH, 'recursive_dir')
         create_folder(test_dir)
         create_file(test_dir)

@@ -9,8 +9,7 @@ import sys
 import time
 import unittest
 
-from backpack.test_utils import random_string
-from backpack.test_utils import time_function_decorator
+from backpack.test_utils import random_string, time_function_decorator
 
 mod_path = os.path.dirname(__file__)
 if mod_path not in sys.path:
@@ -19,18 +18,13 @@ if mod_path not in sys.path:
 
 @time_function_decorator
 def one_second_delay():
-    ''' one second delay to test time_function_decorator '''
+    """One second delay to test time_function_decorator."""
     time.sleep(1)
 
 
-class Test_Errors(unittest.TestCase):
-
-    @classmethod
-    def tearDownClass(cls):
-        pass
-
+class TestTestUtils(unittest.TestCase):
     def test_random_string(self):
-        ''' testing module '''
+        """Testing module."""
         r = random_string(10)
         self.assertEqual(len(r), 10)
         self.assertEqual(isinstance(r, str), True)
@@ -38,6 +32,7 @@ class Test_Errors(unittest.TestCase):
         self.assertEqual(len(r), 0)
 
     def test_delay(self):
+        """Testing time_function_decorator."""
         one_second_delay()
 
 

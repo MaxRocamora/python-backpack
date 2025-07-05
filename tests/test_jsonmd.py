@@ -5,11 +5,11 @@
 # ----------------------------------------------------------------------------------------
 
 import contextlib
-from backpack.json_metadata import JsonMetaFile
-
-import unittest
 import os
 import sys
+import unittest
+
+from backpack.json_metadata import JsonMetaFile
 
 mod_path = os.path.dirname(__file__)
 if mod_path not in sys.path:
@@ -23,18 +23,17 @@ CLASS_NAME = 'proxy'
 ATTRIBUTES = ['foo', 'bar']
 
 
-class Test_windows(unittest.TestCase):
-
+class TestWindows(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
-        # remove test files
+        """Remove test files."""
         with contextlib.suppress(OSError):
             # os.remove(temp_update_json_test_file)
             # os.remove(test_json_file)
             pass
 
     def test_metadata(self):
-        ''' testing module '''
+        """Testing module."""
         meta = JsonMetaFile(NAME, TEST_PATH)
 
         # test properties
@@ -65,22 +64,22 @@ class Test_windows(unittest.TestCase):
         meta.save()
 
         # load
-        metaObj = meta.load_as_class()
-        self.assertEqual(type(metaObj), type)
-        self.assertEqual(hasattr(metaObj, 'items'), True)
-        self.assertEqual(metaObj.items, ATTRIBUTES)
+        meta_obj = meta.load_as_class()
+        self.assertEqual(type(meta_obj), type)
+        self.assertEqual(hasattr(meta_obj, 'items'), True)
+        self.assertEqual(meta_obj.items, ATTRIBUTES)
 
         # load class
         meta = JsonMetaFile(NAME, TEST_PATH)
         meta.load()
 
     def test_create_from_class(self):
-        ''' save_from_a_class '''
+        """save_from_a_class."""
         meta = JsonMetaFile(NAME, TEST_PATH)
         self.assertEqual(meta.name, NAME)
 
-        proxyClass = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
-        meta.insert_class(proxyClass)
+        proxy_class = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
+        meta.insert_class(proxy_class)
         self.assertEqual(meta._data['foo'], 12)
         self.assertEqual(meta._data['items'], ATTRIBUTES)
         meta.save()
