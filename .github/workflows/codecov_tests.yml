@@ -33,7 +33,7 @@ jobs:
         poetry install
 
     - name: Test with tox
-      run: tox
+      run: poetry run tox
 
     # copy coverage.xml from tox to path: '~/coverage.xml'
     - name: Upload coverage.xml
