@@ -2,6 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/python-backpack.svg?style=flat-square&logo=appveyor)](https://badge.fury.io/py/python-backpack)
 [![GitHub version](https://badge.fury.io/gh/MaxRocamora%2Fpython-backpack.svg?style=flat-square&logo=appveyor)](https://badge.fury.io/gh/MaxRocamora%2Fpython-backpack)
 [![codecov](https://codecov.io/gh/MaxRocamora/python-backpack/branch/main/graph/badge.svg?token=6D1xwYdXW2)](https://codecov.io/gh/MaxRocamora/python-backpack)
+[![codecov](https://codecov.io/gh/MaxRocamora/python-backpack/graph/badge.svg?token=6D1xwYdXW2)](https://codecov.io/gh/MaxRocamora/python-backpack)
 
 
 # Python-Backpack
