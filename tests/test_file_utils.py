@@ -36,7 +36,7 @@ class TestErrors(unittest.TestCase):
         source_file = os.path.join(mod_path, 'test_files', 'origin_remove.txt')
         test_file = os.path.join(mod_path, 'test_files', 'edited_remove.txt')
         shutil.copy(source_file, test_file)
-        remove_line_from_file(test_file, ['REMOVE_ME', 'to be replaced!'])
+        remove_line_from_file(test_file, ['REMOVE_ME', 'to be replaced!'], verbose=True)
 
     def test_locked_file(self):
         """Testing module."""
