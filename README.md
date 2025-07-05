@@ -5,7 +5,7 @@
 
 
 # Python-Backpack
-A collection of personal scripts for JSON, File/Folder Operations, String Validation, Custom Errors, Cache and stuff.  
+A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff.  
 
 
 ## Cache
