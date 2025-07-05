@@ -37,7 +37,7 @@ jobs:
     # copy coverage.xml from tox to path: '~/coverage.xml'
     - name: Upload coverage.xml
       if: ${{ matrix.python-version == '3.9' }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upload tox-gh-actions-coverage
         path: ${{ github.workspace }}/coverage.xml
