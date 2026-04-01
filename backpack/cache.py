@@ -5,13 +5,16 @@
 # ----------------------------------------------------------------------------------------
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache, wraps
+from typing import Any, Callable, TypeVar, cast
 
 from backpack.logger import get_logger
 
 log = get_logger('Python Backpack - Cache')
 
+F = TypeVar('F', bound=Callable[..., Any])
 
-def timed_lru_cache(seconds: int, maxsize: int = 128):
+
+def timed_lru_cache(seconds: int, maxsize: int = 128) -> Callable[[F], F]:
     """Lru_cache with expiration time.
 
     Args:
@@ -36,10 +39,10 @@ def timed_lru_cache(seconds: int, maxsize: int = 128):
 
     """
 
-    def wrapper_cache(func):
-        func = lru_cache(maxsize=maxsize)(func)
-        func.lifetime = timedelta(seconds=seconds)
-        func.expiration = datetime.now(timezone.utc) + func.lifetime
+    def wrapper_cache(func: F) -> F:
+        cached_func = cast(Any, lru_cache(maxsize=maxsize)(func))
+        cached_func.lifetime = timedelta(seconds=seconds)
+        cached_func.expiration = datetime.now(timezone.utc) + cached_func.lifetime
 
         @wraps(func)
         def wrapped_func(*args, force_clear: bool = False, show_log: bool = False, **kwargs):
@@ -54,15 +57,15 @@ def timed_lru_cache(seconds: int, maxsize: int = 128):
                 function result
             """
 
-            if force_clear or datetime.now(timezone.utc) >= func.expiration:
+            if force_clear or datetime.now(timezone.utc) >= cached_func.expiration:
                 if show_log:
-                    log.debug(f'Cache cleared for {func.__name__}')
+                    log.debug(f'Cache cleared for {cached_func.__name__}')
 
-                func.cache_clear()
-                func.expiration = datetime.now(timezone.utc) + func.lifetime
+                cached_func.cache_clear()
+                cached_func.expiration = datetime.now(timezone.utc) + cached_func.lifetime
 
-            return func(*args, **kwargs)
+            return cached_func(*args, **kwargs)
 
-        return wrapped_func
+        return cast(F, wrapped_func)
 
     return wrapper_cache
