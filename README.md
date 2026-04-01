@@ -7,6 +7,10 @@
 # Python-Backpack
 A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff.  
 
+## Compatibility
++ Python 3.9+
+
+# Contents
 
 ## Cache
 + timed_lru_cache()  
