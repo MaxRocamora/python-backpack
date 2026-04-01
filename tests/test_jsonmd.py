@@ -74,3 +74,15 @@ def test_create_from_class():
     assert meta._data['foo'] == 12
     assert meta._data['items'] == ATTRIBUTES
     meta.save()
+
+
+def test_metadata_save_creates_missing_directory(tmp_path):
+    """Save should create base folder when target path does not exist."""
+    base_path = tmp_path / 'missing_dir'
+    meta = JsonMetaFile('missing_dir_case', str(base_path))
+
+    assert base_path.exists() is False
+    meta.save()
+
+    assert base_path.exists() is True
+    assert meta.has_file() is True
