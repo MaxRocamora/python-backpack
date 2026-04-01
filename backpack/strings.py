@@ -8,8 +8,11 @@ import contextlib
 import re
 
 
-def reformat_input_string(
-    input_string: str, under_spaces: bool = True, under_hyphen: bool = True
+def normalize_input_string(
+    input_string: str,
+    under_spaces: bool = True,
+    under_hyphen: bool = True,
+    replacer: str = '_',
 ) -> str:
     """Reformat the user input string.
 
@@ -20,6 +23,7 @@ def reformat_input_string(
         input_string (str): input string to reformat
         under_spaces (bool, optional): replaces spaces. Defaults to True.
         under_hyphen (bool, optional): replaces hyphens. Defaults to True.
+        replacer (str, optional): char to replace spaces and hyphens. Defaults to '_'.
 
     Returns:
         str: reformatted string
@@ -30,13 +34,13 @@ def reformat_input_string(
         regex = re.sub('[^A-Za-z0-9 _-]+', '', input_string)
 
     for char in regex:
-        # replacing " " for "_"
+        # replacing " " for replacer
         if under_spaces and char == ' ':
-            regex = regex.replace(' ', '_')
+            regex = regex.replace(' ', replacer)
 
-        # replacing "-" for "_"
+        # replacing "-" for replacer
         if under_hyphen and char == '-':
-            regex = regex.replace('-', '_')
+            regex = regex.replace('-', replacer)
 
     return regex
 
@@ -85,6 +89,7 @@ def camelcase_to_snakecase(input_string: str) -> str:
     Examples:
         OneDayCaseChar > one_day_case_char
         oneCamelCaseChar > one_camel_case_char
+        HTTPServer > http_server
         _TwoCamel_CaseChar > _two_camel_case_char
         _LeadingUnderscore_case_ > _leading_underscore_case_
     """
@@ -97,18 +102,28 @@ def camelcase_to_snakecase(input_string: str) -> str:
             snake_str += char
             continue
 
-        if char.isupper() and index == 0:
-            snake_str += char.lower()
+        if not char.isupper():
+            snake_str += char
             continue
 
-        if char.isupper():
-            if input_string[index - 1] != '_':
-                snake_str += '_' + char.lower()
-            else:
-                snake_str += char.lower()
+        prev_char = input_string[index - 1] if index > 0 else ''
+        next_char = input_string[index + 1] if index + 1 < len(input_string) else ''
 
-            continue
+        # Add underscore only at real word boundaries.
+        # This keeps acronyms together: HTTPServer -> http_server.
+        should_add_underscore = (
+            index > 0
+            and prev_char != '_'
+            and (
+                prev_char.islower()
+                or prev_char.isdigit()
+                or (prev_char.isupper() and next_char.islower())
+            )
+        )
 
-        snake_str += char
+        if should_add_underscore:
+            snake_str += '_'
+
+        snake_str += char.lower()
 
     return snake_str
