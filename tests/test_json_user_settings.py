@@ -70,3 +70,21 @@ def test_json_settings_save():
     # load it back
     data = js.load_settings()
     assert data['custom'] == 'value'
+
+
+def test_user_settings_creates_missing_directory(monkeypatch, tmp_path):
+    """Constructor should create a settings folder when it does not exist."""
+    monkeypatch.setattr(
+        JsonUserSettings,
+        'os_user_folder',
+        property(lambda self: str(tmp_path)),
+    )
+
+    folder_name = 'new_settings_folder'
+    target_dir = tmp_path / folder_name
+
+    assert target_dir.exists() is False
+    js = JsonUserSettings(folder_name, 'user')
+
+    assert target_dir.exists() is True
+    assert os.path.exists(os.path.dirname(js.filepath)) is True
