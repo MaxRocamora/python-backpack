@@ -14,7 +14,7 @@ from backpack.strings import (
     begin_with_number,
     camelcase_to_snakecase,
     has_numbers,
-    reformat_input_string,
+    normalize_input_string,
 )
 
 mod_path = os.path.dirname(__file__)
@@ -96,7 +96,7 @@ def test_begin_or_end_with_numbers(value, expected):
 )
 def test_reformat(value, kwargs, expected):
     """Testing module."""
-    assert reformat_input_string(value, **kwargs) == expected
+    assert normalize_input_string(value, **kwargs) == expected
 
 
 @pytest.mark.parametrize(
@@ -105,6 +105,8 @@ def test_reformat(value, kwargs, expected):
         ('nocamelcase', 'nocamelcase'),
         ('OneCamelCaseChar', 'one_camel_case_char'),
         ('MultiCamelCaseString', 'multi_camel_case_string'),
+        ('HTTPServer', 'http_server'),
+        ('JSONParserV2', 'json_parser_v2'),
         ('_CamelCase_', '_camel_case_'),
         ('_camel_Case_', '_camel_case_'),
     ],
@@ -112,6 +114,8 @@ def test_reformat(value, kwargs, expected):
         'already-snake',
         'single-camel',
         'multi-camel',
+        'acronym-prefix',
+        'acronym-and-version',
         'wrapped-underscore',
         'mixed-underscore-camel',
     ],
