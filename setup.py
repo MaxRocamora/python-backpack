@@ -17,15 +17,13 @@ setup(
     license='GNU GENERAL PUBLIC LICENSE',
     packages=find_packages(),
     classifiers=[
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.11',
     package_data={
         '': ['README.md'],
     },
