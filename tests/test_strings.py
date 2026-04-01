@@ -6,7 +6,8 @@
 
 import os
 import sys
-import unittest
+
+import pytest
 
 from backpack.strings import (
     begin_or_end_with_numbers,
@@ -36,59 +37,85 @@ REFORMAT_BOTH = 'blade runner-2049'
 REFORMAT_BOTH_RESULT = 'blade_runner_2049'
 
 
-class TestStringModule(unittest.TestCase):
-    def test_has_numbers(self):
-        """Testing module."""
-        self.assertEqual(has_numbers(HAS_NUMBERS_TRUE), True)
-        self.assertEqual(has_numbers(HAS_NUMBERS_FALSE), False)
-
-    def test_numbers(self):
-        """Testing module."""
-        self.assertEqual(begin_with_number(BEGIN_WITH_NUMBER_TRUE), True)
-        self.assertEqual(begin_with_number(BEGIN_WITH_NUMBER_FALSE), False)
-
-        # no numbers on ends
-        self.assertEqual(begin_or_end_with_numbers(HAS_NUMBERS_FALSE), False)
-        # begin with number
-        self.assertEqual(begin_or_end_with_numbers(BEGIN_WITH_NUMBER_TRUE), True)
-        # end with number
-        self.assertEqual(begin_or_end_with_numbers(END_WITH_NUMBER_TRUE), True)
-
-    def test_reformat(self):
-        """Testing module."""
-        self.assertEqual(reformat_input_string(REFORMAT_REGEX), REFORMAT_RESULT)
-        self.assertEqual(reformat_input_string(REFORMAT_SPACE), REFORMAT_RESULT)
-        self.assertEqual(reformat_input_string(REFORMAT_HYPHEN), REFORMAT_RESULT)
-        self.assertEqual(reformat_input_string(REFORMAT_BOTH), REFORMAT_BOTH_RESULT)
-        # only regex
-        self.assertEqual(
-            reformat_input_string(REFORMAT_BOTH, under_spaces=False, under_hyphen=False),
-            REFORMAT_BOTH,
-        )
-
-    def test_camelcase_to_snakecase(self):
-        """Testing module."""
-
-        # Test case 1: Input with no uppercase characters
-        input_str, expected_output = 'nocamelcase', 'nocamelcase'
-        self.assertEqual(camelcase_to_snakecase(input_str), expected_output)
-
-        # Test case 2: Input with single uppercase character
-        input_str, expected_output = 'OneCamelCaseChar', 'one_camel_case_char'
-        self.assertEqual(camelcase_to_snakecase(input_str), expected_output)
-
-        # Test case 3: Input with multiple uppercase characters
-        input_str, expected_output = 'MultiCamelCaseString', 'multi_camel_case_string'
-        self.assertEqual(camelcase_to_snakecase(input_str), expected_output)
-
-        # Test case 4: Input with leading and trailing underscores
-        input_str, expected_output = '_CamelCase_', '_camel_case_'
-        self.assertEqual(camelcase_to_snakecase(input_str), expected_output)
-
-        # Test case 5: Input with leading and trailing underscores and lowercase
-        input_str, expected_output = '_camel_Case_', '_camel_case_'
-        self.assertEqual(camelcase_to_snakecase(input_str), expected_output)
+@pytest.mark.parametrize(
+    ('value', 'expected'),
+    [
+        (HAS_NUMBERS_TRUE, True),
+        (HAS_NUMBERS_FALSE, False),
+    ],
+    ids=['contains-number', 'no-number'],
+)
+def test_has_numbers(value, expected):
+    """Testing module."""
+    assert has_numbers(value) is expected
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.parametrize(
+    ('value', 'expected'),
+    [
+        (BEGIN_WITH_NUMBER_TRUE, True),
+        (BEGIN_WITH_NUMBER_FALSE, False),
+    ],
+    ids=['starts-with-number', 'starts-with-letter'],
+)
+def test_begin_with_number(value, expected):
+    """Testing module."""
+    assert begin_with_number(value) is expected
+
+
+@pytest.mark.parametrize(
+    ('value', 'expected'),
+    [
+        (HAS_NUMBERS_FALSE, False),
+        (BEGIN_WITH_NUMBER_TRUE, True),
+        (END_WITH_NUMBER_TRUE, True),
+    ],
+    ids=['number-in-middle-only', 'number-at-start', 'number-at-end'],
+)
+def test_begin_or_end_with_numbers(value, expected):
+    """Testing module."""
+    assert begin_or_end_with_numbers(value) is expected
+
+
+@pytest.mark.parametrize(
+    ('value', 'kwargs', 'expected'),
+    [
+        (REFORMAT_REGEX, {}, REFORMAT_RESULT),
+        (REFORMAT_SPACE, {}, REFORMAT_RESULT),
+        (REFORMAT_HYPHEN, {}, REFORMAT_RESULT),
+        (REFORMAT_BOTH, {}, REFORMAT_BOTH_RESULT),
+        (REFORMAT_BOTH, {'under_spaces': False, 'under_hyphen': False}, REFORMAT_BOTH),
+    ],
+    ids=[
+        'regex-cleanup',
+        'space-to-underscore',
+        'hyphen-to-underscore',
+        'space-and-hyphen',
+        'keep-separators',
+    ],
+)
+def test_reformat(value, kwargs, expected):
+    """Testing module."""
+    assert reformat_input_string(value, **kwargs) == expected
+
+
+@pytest.mark.parametrize(
+    ('input_str', 'expected_output'),
+    [
+        ('nocamelcase', 'nocamelcase'),
+        ('OneCamelCaseChar', 'one_camel_case_char'),
+        ('MultiCamelCaseString', 'multi_camel_case_string'),
+        ('_CamelCase_', '_camel_case_'),
+        ('_camel_Case_', '_camel_case_'),
+    ],
+    ids=[
+        'already-snake',
+        'single-camel',
+        'multi-camel',
+        'wrapped-underscore',
+        'mixed-underscore-camel',
+    ],
+)
+def test_camelcase_to_snakecase(input_str, expected_output):
+    """Testing module."""
+    assert camelcase_to_snakecase(input_str) == expected_output

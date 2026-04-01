@@ -6,7 +6,8 @@
 
 import os
 import sys
-import unittest
+
+import pytest
 
 from backpack.custom_errors import ApplicationNotFoundError, EnvironmentVariableNotFoundError
 
@@ -29,20 +30,18 @@ def get_app(name: str):
     raise ApplicationNotFoundError(f'Background executable not found {name}')
 
 
-class TestErrors(unittest.TestCase):
-    def test_env_var_error(self):
-        """Testing module."""
-        self.assertRaises(EnvironmentVariableNotFoundError, get_env_var, 'my_env_var')
-        error = EnvironmentVariableNotFoundError('my_env_var')
-        self.assertEqual(str(error), error.message)
-
-    def test_env_app_error(self):
-        """Testing module."""
-        self.assertRaises(ApplicationNotFoundError, get_app, 'my_app.exe')
-
-        error = ApplicationNotFoundError('my_app.exe')
-        self.assertEqual(str(error), error.message)
+def test_env_var_error():
+    """Testing module."""
+    with pytest.raises(EnvironmentVariableNotFoundError):
+        get_env_var('my_env_var')
+    error = EnvironmentVariableNotFoundError('my_env_var')
+    assert str(error) == error.message
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_env_app_error():
+    """Testing module."""
+    with pytest.raises(ApplicationNotFoundError):
+        get_app('my_app.exe')
+
+    error = ApplicationNotFoundError('my_app.exe')
+    assert str(error) == error.message

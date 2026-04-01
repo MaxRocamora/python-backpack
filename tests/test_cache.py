@@ -4,23 +4,17 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import unittest
-
 from backpack.cache import timed_lru_cache
 
 
-class TestCache(unittest.TestCase):
-    @timed_lru_cache(seconds=1)
-    def test_function(self):
-        """Some heavy process here to be cached."""
-        return True
-
-    def test_cache(self):
-        """Testing module."""
-        self.assertTrue(self.test_function())
-        self.assertEqual(True, self.test_function(force_clear=True))
-        self.assertEqual(True, self.test_function(force_clear=True, show_log=True))
+@timed_lru_cache(seconds=1)
+def cached_test_function():
+    """Some heavy process here to be cached."""
+    return True
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_cache():
+    """Testing module."""
+    assert cached_test_function()
+    assert cached_test_function(force_clear=True) is True
+    assert cached_test_function(force_clear=True, show_log=True) is True

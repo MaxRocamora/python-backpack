@@ -7,7 +7,6 @@
 import contextlib
 import os
 import sys
-import unittest
 
 from backpack.json_metadata import JsonMetaFile
 
@@ -23,67 +22,55 @@ CLASS_NAME = 'proxy'
 ATTRIBUTES = ['foo', 'bar']
 
 
-class TestWindows(unittest.TestCase):
-    @classmethod
-    def tearDownClass(cls):
-        """Remove test files."""
-        with contextlib.suppress(OSError):
-            # os.remove(temp_update_json_test_file)
-            # os.remove(test_json_file)
-            pass
+def test_metadata():
+    """Testing module."""
+    meta = JsonMetaFile(NAME, TEST_PATH)
 
-    def test_metadata(self):
-        """Testing module."""
-        meta = JsonMetaFile(NAME, TEST_PATH)
+    # test properties
+    assert meta.name == NAME
 
-        # test properties
-        self.assertEqual(meta.name, NAME)
+    meta.insert(key='coins', value=12)
 
-        meta.insert(key='coins', value=12)
+    # check if data have coins and value 12
+    assert meta._data['coins'] == 12
 
-        # check if data have coins and value 12
-        self.assertEqual(meta._data['coins'], 12)
+    meta.save()
 
-        meta.save()
+    # file was created
+    assert meta.has_file() is True
 
-        # file was created
-        self.assertEqual(meta.has_file(), True)
+    # check if file exists
+    assert os.path.exists(meta.filepath) is True
 
-        # check if file exists
-        self.assertEqual(os.path.exists(meta.filepath), True)
+    meta.insert('coins', 7)
 
-        meta.insert('coins', 7)
+    # check if data have coins and value 7
+    assert meta._data['coins'] == 7
 
-        # check if data have coins and value 7
-        self.assertEqual(meta._data['coins'], 7)
+    meta.remove('coins')
+    assert meta._data.get('coins', None) is None
 
-        meta.remove('coins')
-        self.assertEqual(meta._data.get('coins', None), None)
+    meta.insert(key='items', value=ATTRIBUTES)
+    meta.save()
 
-        meta.insert(key='items', value=ATTRIBUTES)
-        meta.save()
+    # load
+    meta_obj = meta.load_as_class()
+    assert isinstance(meta_obj, type)
+    assert hasattr(meta_obj, 'items') is True
+    assert meta_obj.items == ATTRIBUTES
 
-        # load
-        meta_obj = meta.load_as_class()
-        self.assertEqual(type(meta_obj), type)
-        self.assertEqual(hasattr(meta_obj, 'items'), True)
-        self.assertEqual(meta_obj.items, ATTRIBUTES)
-
-        # load class
-        meta = JsonMetaFile(NAME, TEST_PATH)
-        meta.load()
-
-    def test_create_from_class(self):
-        """save_from_a_class."""
-        meta = JsonMetaFile(NAME, TEST_PATH)
-        self.assertEqual(meta.name, NAME)
-
-        proxy_class = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
-        meta.insert_class(proxy_class)
-        self.assertEqual(meta._data['foo'], 12)
-        self.assertEqual(meta._data['items'], ATTRIBUTES)
-        meta.save()
+    # load class
+    meta = JsonMetaFile(NAME, TEST_PATH)
+    meta.load()
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_create_from_class():
+    """save_from_a_class."""
+    meta = JsonMetaFile(NAME, TEST_PATH)
+    assert meta.name == NAME
+
+    proxy_class = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
+    meta.insert_class(proxy_class)
+    assert meta._data['foo'] == 12
+    assert meta._data['items'] == ATTRIBUTES
+    meta.save()

@@ -7,7 +7,6 @@
 import logging
 import os
 import sys
-import unittest
 
 from backpack.logger import get_logger
 from backpack.patterns import Singleton
@@ -25,32 +24,24 @@ class UniqueClass(Singleton):
         super().__init__()
 
 
-class TestErrors(unittest.TestCase):
-    @classmethod
-    def tearDownClass(cls):
-        """Closing test."""
-        pass
-
-    def test_version(self):
-        """Testing module."""
-        self.assertEqual(app_name, 'python-backpack')
-        self.assertEqual(version, f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}')
-
-    def test_logger(self):
-        """Test logger creation."""
-        log = get_logger('test')
-        self.assertEqual(log.name, 'test')
-        self.assertEqual(log.level, logging.DEBUG)
-
-    def test_singleton(self):
-        """Create a singleton twice and check attribute."""
-        _singleton = UniqueClass()
-        self.assertFalse(hasattr(_singleton, 'name'))
-        _singleton.name = random_string(5)
-        # create from singleton
-        _singleton_b = UniqueClass()
-        self.assertTrue(hasattr(_singleton_b, 'name'))
+def test_version():
+    """Testing module."""
+    assert app_name == 'python-backpack'
+    assert version == f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}'
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_logger():
+    """Test logger creation."""
+    log = get_logger('test')
+    assert log.name == 'test'
+    assert log.level == logging.DEBUG
+
+
+def test_singleton():
+    """Create a singleton twice and check attribute."""
+    _singleton = UniqueClass()
+    assert not hasattr(_singleton, 'name')
+    _singleton.name = random_string(5)
+    # create from singleton
+    _singleton_b = UniqueClass()
+    assert hasattr(_singleton_b, 'name')
