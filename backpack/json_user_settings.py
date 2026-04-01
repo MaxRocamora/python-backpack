@@ -9,6 +9,7 @@ us.save(someDict)
 data = us.load()
 
 """
+
 # ----------------------------------------------------------------------------------------
 import os
 
@@ -59,14 +60,16 @@ class JsonUserSettings:
 
         return True
 
-    def save_settings(self, data=False) -> bool:
+    def save_settings(self, data: dict | None = None) -> bool | None:
         """Saves a dictionary into a json file (os user path).
 
         Args:
-            data (dictionary) : info dictionary to save, if set to False,
+            data (dictionary): info dictionary to save, if not provided,
                 saves instead local self.user_data property
+        Returns:
+            bool | None: True if file was saved, False if error, None if no data to save.
         """
-        if not data:
+        if data is None:
             data = self.user_data
 
         r = json_save(data, self.filepath)
@@ -74,7 +77,7 @@ class JsonUserSettings:
             log.info('json settings file saved! [%s]', self.filepath)
         return r
 
-    def load_settings(self) -> dict:
+    def load_settings(self) -> dict | bool:
         """Load json file from path and returns its contents."""
         try:
             return json_load(self.filepath)
