@@ -12,7 +12,7 @@ from backpack.logger import get_logger
 log = get_logger('Python Backpack - TestUtils')
 
 
-def random_string(length: str = 10) -> str:
+def random_string(length: int = 10) -> str:
     """Generates a random string of fixed length.
 
     Args:
