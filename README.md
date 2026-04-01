@@ -5,86 +5,140 @@
 
 
 # Python-Backpack
-A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff.  
+
+Python-Backpack is a lightweight utility collection for common scripting tasks:
+
+- JSON load/save helpers with validation
+- user settings persistence under the OS user directory
+- metadata export/import to JSON files
+- file and folder operations
+- string normalization and case conversion
+- cache decorator with expiration support
+- custom exceptions, logging helper, singleton pattern, and testing helpers
 
 ## Compatibility
-+ Python 3.9+
 
-# Contents
+- Python 3.11+
 
-## Cache
-+ timed_lru_cache()  
-    *Lru_cache decorator with expiration time.*
+## Installation
 
-## Custom Errors
-+ EnvironmentVariableNotFound()  
-*Error Raised when a required environment variable is missing from os.*
-+ ApplicationNotFound()  
-*Error Raised when an Application Name required is not found.*
-
-## File Utils
-+ replace_strings_in_file()  
-*Opens a file and replaces all occurrences from strings into a new string.*
-+ remove_line_from_file()  
-*Removes given list of lines from ascii file*
-+ file_is_writeable()  
-*Checks if a file is writeable, returns True if it is, False otherwise.*
-
-## Folder Utils
-+ browse_folder()  
-*Open windows explorer on folder*
-+ create_folders()  
-*Create multiple folders in a given path*
-+ create_folder()  
-*Create a folder in a given path, can remove old folder*
-+ remove_files_in_dir()  
-*Remove all files in a directory, can remove subdirectories too*
-+ recursive_dir_copy()  
-*Copy all files src dir to dest dir, including sub-directories.*
-
-
-## Json Metadata
-+ JsonMetaFile()  
-    *saves/load a class/dict as a json metadata file*
-
-## Json User Settings
-+ JsonUserSettings()  
-    *Class to manage load/save settings in a JSON file on local user folder*
-
-## Json Utils
-+ json_load()  
-    *Function to load a JSON file with validation.*
-+ json_save()  
-    *Function to save a JSON file with validation.*
-
-## Patterns
-+ Singleton(): *Singleton pattern implementation.*
-
-## String Validation
-+ reformat_input_string()  
-*Function to reformat an input string, leaves only alphanumeric chars and replaces spaces and hyphens for underscores.*
-
-+ begin_or_end_with_numbers()  
-*Function to check if a string begins or ends with numbers.*
-
-+ begin_with_number()   
-*Function to check if a string begins with a number.*
-
-+ has_numbers()  
-*Function to check if a string contains numbers.*
-
-+ camelcase_to_snakecase()  
-*Function to convert a camelCase string to snake_case.*
-
-## Test Utils
-+ time_function_decorator()  
-*Decorator to measure the execution time of a function.*
-+ random_string()  
-*Generate a random string of a given length.*
-
-
----
-
-### pip install
+```bash
 pip install python-backpack
+```
+
+## Package API Reference
+
+### Cache (`backpack.cache`)
+
+- `timed_lru_cache(seconds: int, maxsize: int = 128)`
+    - `functools.lru_cache` decorator with expiration time.
+    - Wrapped calls support `force_clear=True` and `show_log=True`.
+
+### Custom Errors (`backpack.custom_errors`)
+
+- `EnvironmentVariableNotFoundError(var_name: str)`
+    - Raised when a required environment variable is missing.
+- `ApplicationNotFoundError(app_name: str)`
+    - Raised when a required application is not found.
+
+### File Utils (`backpack.file_utils`)
+
+- `replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> None`
+    - Replaces multiple string occurrences in a text file.
+- `remove_line_from_file(ascii_file: str, strings: list, verbose: bool = False) -> None`
+    - Removes exact matching lines from a text file.
+- `file_is_writeable(filepath: str) -> bool`
+    - Checks whether a file can be opened for read/write.
+
+### Folder Utils (`backpack.folder_utils`)
+
+- `browse_folder(folder: str) -> bool`
+    - Opens a folder in Windows Explorer.
+- `create_folders(folders: list, force_empty: bool = False, verbose: bool = False)`
+    - Creates multiple folders.
+- `create_folder(path: str, force_empty: bool = False, verbose: bool = True)`
+    - Creates a folder and optionally clears it if it already exists.
+- `remove_files_in_dir(path: str)`
+    - Removes all files and subdirectories inside a directory.
+- `recursive_dir_copy(source_path: str, target_path: str)`
+    - Recursively copies files and subfolders from source to target.
+
+### JSON Utils (`backpack.json_utils`)
+
+- `json_load(json_file: str) -> dict`
+    - Loads JSON data from file with validation and error handling.
+- `json_save(data: dict, json_file: str) -> bool`
+    - Saves a dictionary to JSON file.
+
+### JSON Metadata (`backpack.json_metadata`)
+
+- `JsonMetaFile(name: str, path: str)`
+    - Manages a metadata JSON file with package/system/time information.
+    - Main public methods:
+        - `has_file() -> bool`
+        - `load() -> None`
+        - `insert(key: str, value: Any) -> None`
+        - `remove(key: str) -> None`
+        - `save() -> None`
+        - `load_as_class() -> type`
+        - `insert_class(_class: type) -> None`
+
+### JSON User Settings (`backpack.json_user_settings`)
+
+- `JsonUserSettings(folder: str, name: str)`
+    - Saves and loads JSON settings in the current user's home directory.
+    - Main public methods:
+        - `save_settings(data: dict | None = None) -> bool | None`
+        - `load_settings() -> dict | bool`
+
+### Logger (`backpack.logger`)
+
+- `get_logger(name: str) -> logging.Logger`
+    - Returns a configured logger with stream handler.
+
+### Patterns (`backpack.patterns`)
+
+- `Singleton`
+    - Base class implementing singleton behavior via `__new__`.
+
+### Strings (`backpack.strings`)
+
+- `normalize_input_string(input_string: str, under_spaces: bool = True, under_hyphen: bool = True, replacer: str = '_') -> str`
+    - Keeps alphanumeric/space/hyphen characters and normalizes separators.
+- `begin_or_end_with_numbers(input_string: str) -> bool`
+    - Checks whether first or last character is numeric.
+- `begin_with_number(input_string: str) -> bool`
+    - Checks whether the first character is numeric.
+- `has_numbers(input_string: str) -> bool`
+    - Checks whether any character is numeric.
+- `camelcase_to_snakecase(input_string: str) -> str`
+    - Converts CamelCase to snake_case.
+    - Handles acronym prefixes, for example `HTTPServer -> http_server`.
+
+### Test Utils (`backpack.test_utils`)
+
+- `random_string(length: int = 10) -> str`
+    - Generates a random lowercase string.
+- `time_function_decorator(method: type)`
+    - Decorator that logs execution time.
+
+## Quick Example
+
+```python
+from backpack.cache import timed_lru_cache
+from backpack.strings import camelcase_to_snakecase, normalize_input_string
+from backpack.json_utils import json_save, json_load
+
+
+@timed_lru_cache(seconds=60)
+def expensive_call():
+        return {'ok': True}
+
+
+value = camelcase_to_snakecase('HTTPServer')
+clean = normalize_input_string('Blade Runner-2049')
+
+json_save({'value': value, 'clean': clean}, 'data.json')
+data = json_load('data.json')
+```
 
