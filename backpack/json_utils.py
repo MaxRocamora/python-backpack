@@ -40,7 +40,7 @@ def json_save(data: dict, json_file: str) -> bool:
     """
 
     if not os.path.exists(os.path.dirname(json_file)):
-        os.makedirs(os.path.dirname(json_file))
+        os.makedirs(os.path.dirname(json_file), exist_ok=True)
 
     try:
         with open(json_file, 'w') as f:
