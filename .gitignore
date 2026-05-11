@@ -129,4 +129,3 @@ dmypy.json
 
 # test generated files
 tests/test_json/MD_test.json
-poetry.lock
