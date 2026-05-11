@@ -8,7 +8,14 @@ import os
 import shutil
 import sys
 
-from backpack.file_utils import file_is_writeable, remove_line_from_file, replace_strings_in_file
+import pytest
+
+from backpack.file_utils import (
+    file_is_writeable,
+    get_version_from_filename,
+    remove_line_from_file,
+    replace_strings_in_file,
+)
 
 mod_path = os.path.dirname(__file__)
 if mod_path not in sys.path:
@@ -42,3 +49,23 @@ def test_locked_file():
     """Testing module."""
     assert file_is_writeable(UNLOCKED_FILE)
     assert not file_is_writeable(NO_FILE)
+
+
+@pytest.mark.parametrize(
+    ('filename', 'expected_version'),
+    [
+        ('myfile_23.txt', '23'),
+        ('myfile-9.txt', '9'),
+        ('myfile.130.txt', '130'),
+        ('myfile_v1002.txt', '1002'),
+        ('name_without_separator.txt', '0'),
+        ('v42.txt', '42'),
+        ('myfile-alpha.txt', '0'),
+        ('myfile.txt', '0'),
+        ('mod_asset.1004.ma', '1004'),
+        ('script_nuke_s100_v1005.ma', '1005'),
+    ],
+)
+def test_get_version_from_filename(filename: str, expected_version: str):
+    """Version extraction should handle supported separators and invalid values."""
+    assert get_version_from_filename(filename) == expected_version
