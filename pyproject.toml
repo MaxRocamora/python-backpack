@@ -1,22 +1,29 @@
-[tool.poetry]
+[project]
 name = "python-backpack"
-version = "2.0.0"
+version = "2.0.1"
 description = "A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff."
-authors = ["Maximiliano Rocamora"]
-packages = [
-    { include = "backpack" }
+authors = [
+    { name = "Maximiliano Rocamora" }
+]
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "coverage>=7.14.0",
+    "ruff>=0.15.12",
+    "mock>=5.2.0",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.15.8"
-mock = "^5.2.0"
-coverage = "^7.13.5"
-pytest = "^8.4.2"
-pytest-cov = "^7.1.0"
-
 [build-system]
-requires = ["poetry-core>=2.3.2"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backpack"]
+
+[tool.pytest.ini_options]
+addopts = "-p no:cacheprovider"
+testpaths = ["tests"]
