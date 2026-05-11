@@ -73,6 +73,14 @@ def test_browse(mock_browse):
     browse_folder(None)
 
 
+@mock.patch('backpack.folder_utils.os.makedirs')
+def test_create_folder_oserror(mock_makedirs):
+    """Test OSError handling in create_folder."""
+    mock_makedirs.side_effect = OSError('Permission denied')
+    result = create_folder(os.path.join(BASE_PATH, 'error_folder'))
+    assert result is True  # Should still return True even on error
+
+
 def test_remove_dir():
     """Creates a folder with files and remove it."""
     test_dir = os.path.join(BASE_PATH, 'remove_dir')
