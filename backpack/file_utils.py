@@ -84,3 +84,44 @@ def file_is_writeable(filepath: str) -> bool:
         log.info(x.strerror)
 
     return False
+
+
+def get_version_from_filename(filename: str) -> str:
+    """Extracts version from filename.
+
+    Args:
+        filename: (str) file name to extract version from
+    Returns:
+        str : version extracted from filename
+
+    Examples:
+        get_version_from_filename('myfile_23.txt') -> '23'
+        get_version_from_filename('myfile-9.txt') -> '9'
+        get_version_from_filename('myfile.130.txt') -> '130'
+        get_version_from_filename('myfile_v1002.txt') -> '1002'
+
+    """
+
+    filename_no_ext = filename.rsplit('.', 1)[0]
+
+    # guess is the separator is an underscore, dash, dot or v, and the version is the last part before the extension
+    separators = ['_', '-', '.', 'v']
+    if not any(sep in filename_no_ext for sep in separators):
+        log.info(f'No separator found in filename: {filename_no_ext}. Using fallback extraction.')
+    else:
+        for sep in separators:
+            if sep in filename_no_ext:
+                parts = filename_no_ext.split(sep)
+                version_part = parts[-1].split('.')[0]  # Get the last part before the extension
+                if version_part.replace('.', '').isdigit():  # Check if it's a valid version number
+                    log.info(
+                        f'Extracted version: {version_part} from filename: {filename} using separator: {sep}'
+                    )
+                    return version_part
+
+    # Fallback: extract from the entire filename
+    version = filename_no_ext.lstrip('v')
+    version = version.replace('_', '.').replace('-', '.')
+    version = version if version.replace('.', '').isdigit() else '0'
+    log.info(f'Extracted version: {version} from filename: {filename}')
+    return version
