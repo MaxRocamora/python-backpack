@@ -9,12 +9,12 @@
 # 1.1.2 07/2025 - Update actions versions, remove unused badge from README
 # 1.1.3 07/2025 - Improve test class names and docstrings for clarity, ruff formatting
 # 1.1.4 07/2025 - Moved from pipenv to poetry for dependency management.toml
-# 2.0.0 03/2026 - Remove tox workflow and setup.py, standardize Poetry + coverage tooling
+# 2.0.1 05/2026 - Remove tox workflow and setup.py, standardize uv + coverage tooling
 # ----------------------------------------------------------------------------------------
 
 VERSION_MAJOR = 2
 VERSION_MINOR = 0
-VERSION_PATCH = 0
+VERSION_PATCH = 1
 
 version = f'{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}'
 
