@@ -1,7 +1,8 @@
 [project]
 name = "python-backpack"
-version = "2.0.1"
+version = "2.0.2"
 description = "A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff."
+readme = "README.md"
 authors = [
     { name = "Maximiliano Rocamora" }
 ]
@@ -18,8 +19,8 @@ dev = [
 ]
 
 [build-system]
-requires = ["uv_build >= 0.11.7, <0.12.0"]
-build-backend = "uv_build"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["backpack"]
