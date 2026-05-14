@@ -49,6 +49,8 @@ pip install python-backpack
     - Removes exact matching lines from a text file.
 - `file_is_writeable(filepath: str) -> bool`
     - Checks whether a file can be opened for read/write.
+- `get_version_from_filename(filename: str) -> str`
+    - Extracts a numeric version token from a filename.
 
 ### Folder Utils (`backpack.folder_utils`)
 
