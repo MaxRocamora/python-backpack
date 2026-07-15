@@ -13,8 +13,10 @@ select = ["D", "F", "N", "I", "W"]
 ignore = ["E402", "D100", "D202", "D101", "D104"]
 
 [lint.per-file-ignores]
-# Ignore `E402` (import violations) in all `__init__.py` files.
-"__init__.py" = ["E402"]
+# Ignore `E402` (import violations) and `N999` (invalid module name) in all
+# `__init__.py` files. `N999` is triggered by the repository/package layout on
+# this project, not by an actionable module rename inside the repo.
+"__init__.py" = ["E402", "N999"]
 
 [lint.pydocstyle]
 convention = "google"  # Accepts: "google", "numpy", or "pep257".

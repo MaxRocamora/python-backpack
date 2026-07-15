@@ -1,13 +1,31 @@
 [project]
 name = "python-backpack"
-version = "2.0.2"
-description = "A collection of personal scripts for json, File/Folder Operations, String Validation, Custom Errors, Cache and stuff."
-readme = "README.md"
+dynamic = ["version"]
+description = "Lightweight utilities for JSON, filesystem operations, strings, caching, and scripting."
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
 authors = [
-    { name = "Maximiliano Rocamora" }
+    { name = "Maximiliano Rocamora", email = "maxirocamora@gmail.com" }
 ]
+keywords = ["cache", "filesystem", "json", "strings", "utilities"]
 requires-python = ">=3.11"
 dependencies = []
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/MaxRocamora/python-backpack"
+Repository = "https://github.com/MaxRocamora/python-backpack.git"
 
 [dependency-groups]
 dev = [
@@ -16,6 +34,7 @@ dev = [
     "mock>=5.2.0",
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
+    "pyright>=1.1.411",
 ]
 
 [build-system]
@@ -24,6 +43,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["backpack"]
+
+[tool.hatch.version]
+path = "backpack/version.py"
 
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.11']
+        python-version: ['3.11', '3.12', '3.13', '3.14']
 
     steps:
     - uses: actions/checkout@v6
@@ -19,20 +19,29 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Add path to PYTHONPATH
-      run: |
-        echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install uv
         uv sync --dev
 
-    - name: Run tests with coverage
+    - name: Run Ruff
+      if: ${{ matrix.python-version == '3.11' }}
+      run: uv run ruff check .
+
+    - name: Run Pyright
+      if: ${{ matrix.python-version == '3.11' }}
+      run: uv run pyright backpack tests
+
+    - name: Run tests
+      if: ${{ matrix.python-version != '3.11' }}
+      run: uv run pytest
+
+    - name: Run tests with branch coverage
+      if: ${{ matrix.python-version == '3.11' }}
       run: |
-        uv run coverage run --source=backpack -m pytest
-        uv run coverage report -m --fail-under=70
+        uv run coverage run --branch --source=backpack -m pytest
+        uv run coverage report -m --fail-under=99
         uv run coverage xml
 
     - name: Upload coverage.xml
