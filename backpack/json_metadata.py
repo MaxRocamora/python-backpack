@@ -3,6 +3,7 @@
 # Maximiliano Rocamora / maxirocamora@gmail.com
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
+import getpass
 import inspect
 import os
 import platform
@@ -97,7 +98,9 @@ class JsonMetaFile:
         attributes = {}
         for name in dir(_class):
             value = getattr(_class, name)
-            if not name.startswith('__') and not inspect.ismethod(value):
+            if not name.startswith('__') and not (
+                inspect.isroutine(value) or inspect.isdatadescriptor(value)
+            ):
                 attributes[name] = value
 
         self._data = attributes
@@ -113,7 +116,7 @@ class JsonMetaFile:
             'app': os.path.basename(sys.executable),
             'PC': str(platform.node()),
             'python_version': sys.version,
-            'User': str(os.getenv('username')),
+            'User': getpass.getuser(),
             'time': self._current_time_metadata(),
         }
 

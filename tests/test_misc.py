@@ -5,17 +5,11 @@
 # ----------------------------------------------------------------------------------------
 
 import logging
-import os
-import sys
 
 from backpack.logger import get_logger
 from backpack.patterns import Singleton
 from backpack.test_utils import random_string
 from backpack.version import VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, app_name, version
-
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
 
 
 class UniqueClass(Singleton):
@@ -41,7 +35,21 @@ def test_singleton():
     """Create a singleton twice and check attribute."""
     _singleton = UniqueClass()
     assert not hasattr(_singleton, 'name')
-    _singleton.name = random_string(5)
+    setattr(_singleton, 'name', random_string(5))
     # create from singleton
     _singleton_b = UniqueClass()
     assert hasattr(_singleton_b, 'name')
+
+
+def test_singleton_instances_are_scoped_to_subclasses():
+    """Keep one instance per concrete Singleton subclass."""
+
+    class FirstSingleton(Singleton):
+        pass
+
+    class SecondSingleton(Singleton):
+        pass
+
+    assert FirstSingleton() is FirstSingleton()
+    assert SecondSingleton() is SecondSingleton()
+    assert FirstSingleton() is not SecondSingleton()

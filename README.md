@@ -43,10 +43,10 @@ pip install python-backpack
 
 ### File Utils (`backpack.file_utils`)
 
-- `replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> None`
+- `replace_strings_in_file(ascii_file: str, strings: Sequence[str], new_string: str) -> None`
     - Replaces multiple string occurrences in a text file.
-- `remove_line_from_file(ascii_file: str, strings: list, verbose: bool = False) -> None`
-    - Removes exact matching lines from a text file.
+- `remove_line_from_file(ascii_file: str, strings: Sequence[str], verbose: bool = False) -> None`
+    - Removes every exact matching line while preserving retained line endings.
 - `file_is_writeable(filepath: str) -> bool`
     - Checks whether a file can be opened for read/write.
 - `get_version_from_filename(filename: str) -> str`
@@ -54,23 +54,23 @@ pip install python-backpack
 
 ### Folder Utils (`backpack.folder_utils`)
 
-- `browse_folder(folder: str) -> bool`
-    - Opens a folder in Windows Explorer.
-- `create_folders(folders: list, force_empty: bool = False, verbose: bool = False)`
+- `browse_folder(folder: str | None) -> bool`
+    - Opens a valid folder in Windows Explorer and returns `False` if it cannot be opened.
+- `create_folders(folders: Sequence[str], force_empty: bool = False, verbose: bool = False) -> None`
     - Creates multiple folders.
-- `create_folder(path: str, force_empty: bool = False, verbose: bool = True)`
+- `create_folder(path: str, force_empty: bool = False, verbose: bool = True) -> bool`
     - Creates a folder and optionally clears it if it already exists.
-- `remove_files_in_dir(path: str)`
+- `remove_files_in_dir(path: str) -> None`
     - Removes all files and subdirectories inside a directory.
-- `recursive_dir_copy(source_path: str, target_path: str)`
+- `recursive_dir_copy(source_path: str, target_path: str) -> None`
     - Recursively copies files and subfolders from source to target.
 
 ### JSON Utils (`backpack.json_utils`)
 
 - `json_load(json_file: str) -> dict`
     - Loads JSON data from file with validation and error handling.
-- `json_save(data: dict, json_file: str) -> bool`
-    - Saves a dictionary to JSON file.
+- `json_save(data: object, json_file: str) -> bool`
+    - Saves a JSON-serializable value as UTF-8 and returns whether it succeeded.
 
 ### JSON Metadata (`backpack.json_metadata`)
 
@@ -90,7 +90,7 @@ pip install python-backpack
 - `JsonUserSettings(folder: str, name: str)`
     - Saves and loads JSON settings in the current user's home directory.
     - Main public methods:
-        - `save_settings(data: dict | None = None) -> bool | None`
+        - `save_settings(data: dict | None = None) -> bool`
         - `load_settings() -> dict | bool`
 
 ### Logger (`backpack.logger`)
@@ -121,8 +121,8 @@ pip install python-backpack
 
 - `random_string(length: int = 10) -> str`
     - Generates a random lowercase string.
-- `time_function_decorator(method: type)`
-    - Decorator that logs execution time.
+- `time_function_decorator(method: Callable[P, R]) -> Callable[P, R]`
+    - Decorator that logs execution time while preserving function metadata and return values.
 
 ## Quick Example
 
@@ -134,7 +134,7 @@ from backpack.json_utils import json_save, json_load
 
 @timed_lru_cache(seconds=60)
 def expensive_call():
-        return {'ok': True}
+    return {'ok': True}
 
 
 value = camelcase_to_snakecase('HTTPServer')

@@ -4,9 +4,6 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import os
-import sys
-
 import pytest
 
 from backpack.strings import (
@@ -16,10 +13,6 @@ from backpack.strings import (
     has_numbers,
     normalize_input_string,
 )
-
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
 
 # Tests Constants
 HAS_NUMBERS_TRUE = 'blade1_runner'
@@ -63,6 +56,11 @@ def test_begin_with_number(value, expected):
     assert begin_with_number(value) is expected
 
 
+def test_begin_with_number_empty_string():
+    """Return False when no first character exists."""
+    assert begin_with_number('') is False
+
+
 @pytest.mark.parametrize(
     ('value', 'expected'),
     [
@@ -75,6 +73,11 @@ def test_begin_with_number(value, expected):
 def test_begin_or_end_with_numbers(value, expected):
     """Testing module."""
     assert begin_or_end_with_numbers(value) is expected
+
+
+def test_begin_or_end_with_numbers_empty_string():
+    """Return False when no boundary characters exist."""
+    assert begin_or_end_with_numbers('') is False
 
 
 @pytest.mark.parametrize(

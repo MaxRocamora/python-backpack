@@ -4,47 +4,28 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import contextlib
-import os
-import sys
+import json
 
 from backpack.json_metadata import JsonMetaFile
 
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
-
-
-# test path & name
-TEST_PATH = os.path.join(mod_path, 'test_json')
 NAME = 'test'
-CLASS_NAME = 'proxy'
 ATTRIBUTES = ['foo', 'bar']
 
 
-def test_metadata():
+def test_metadata(tmp_path):
     """Testing module."""
-    meta = JsonMetaFile(NAME, TEST_PATH)
+    meta = JsonMetaFile(NAME, str(tmp_path))
 
-    # test properties
     assert meta.name == NAME
 
     meta.insert(key='coins', value=12)
-
-    # check if data have coins and value 12
     assert meta._data['coins'] == 12
 
     meta.save()
-
-    # file was created
     assert meta.has_file() is True
-
-    # check if file exists
-    assert os.path.exists(meta.filepath) is True
+    assert json.loads((tmp_path / meta.filename).read_text())['coins'] == 12
 
     meta.insert('coins', 7)
-
-    # check if data have coins and value 7
     assert meta._data['coins'] == 7
 
     meta.remove('coins')
@@ -53,20 +34,19 @@ def test_metadata():
     meta.insert(key='items', value=ATTRIBUTES)
     meta.save()
 
-    # load
     meta_obj = meta.load_as_class()
     assert isinstance(meta_obj, type)
     assert hasattr(meta_obj, 'items') is True
     assert meta_obj.items == ATTRIBUTES
 
-    # load class
-    meta = JsonMetaFile(NAME, TEST_PATH)
-    meta.load()
+    loaded_meta = JsonMetaFile(NAME, str(tmp_path))
+    loaded_meta.load()
+    assert loaded_meta._data['items'] == ATTRIBUTES
 
 
-def test_create_from_class():
+def test_create_from_class(tmp_path):
     """save_from_a_class."""
-    meta = JsonMetaFile(NAME, TEST_PATH)
+    meta = JsonMetaFile(NAME, str(tmp_path))
     assert meta.name == NAME
 
     proxy_class = type('Proxy', (), {'foo': 12, 'items': ATTRIBUTES})
@@ -74,6 +54,26 @@ def test_create_from_class():
     assert meta._data['foo'] == 12
     assert meta._data['items'] == ATTRIBUTES
     meta.save()
+    assert meta.has_file() is True
+
+
+def test_insert_class_excludes_non_serializable_members(tmp_path):
+    """Store class data without methods or descriptors that JSON cannot serialize."""
+
+    class Proxy:
+        value = 12
+
+        @property
+        def computed(self):
+            return self.value
+
+        def method(self):
+            return self.value
+
+    meta = JsonMetaFile(NAME, str(tmp_path))
+    meta.insert_class(Proxy)
+
+    assert meta._data == {'value': 12}
 
 
 def test_metadata_save_creates_missing_directory(tmp_path):

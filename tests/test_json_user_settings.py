@@ -4,87 +4,64 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import contextlib
-import os
-import sys
+from pathlib import Path
 
 import pytest
 
 from backpack.json_user_settings import JsonUserSettings
 
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
-
-
-# test path & name
 FOLDER = 'tox_test_folder'
-TEST_FOLDER = os.path.join(os.path.expanduser('~'), FOLDER)
-
-
-def _cleanup_test_folder():
-    """Remove test files."""
-    with contextlib.suppress(OSError):
-        os.remove(TEST_FOLDER)
 
 
 @pytest.fixture(autouse=True)
-def cleanup_test_folder():
-    """Ensure tests run with a clean state and leave no temp setting file behind."""
-    _cleanup_test_folder()
-    yield
-    _cleanup_test_folder()
-
-
-def test_json_user_settings():
-    """Make sure folder does not exist."""
-    with contextlib.suppress(PermissionError, OSError):
-        if os.path.exists(TEST_FOLDER):
-            os.removedirs(TEST_FOLDER)
-
-    # class and properties
-    js = JsonUserSettings(FOLDER, 'user')
-    assert js.filepath
-    assert os.path.exists(js.os_user_folder)
-    assert isinstance(js.user_data, dict)
-
-    # load from a missing file
-    js.filename = 'random_file'
-    assert js.load_settings() is False
-
-
-def test_json_settings_save():
-    """Test json settings: save."""
-    # save a setting
-    js = JsonUserSettings(FOLDER, 'tox')
-    data = {'age': 99}
-    assert js.save_settings(data)
-
-    # load it back
-    js = JsonUserSettings(FOLDER, 'tox')
-    data = js.load_settings()
-    assert data['age'] == 99
-    # save custom setting
-    js.user_data = {'custom': 'value'}
-    assert js.save_settings()
-    # load it back
-    data = js.load_settings()
-    assert data['custom'] == 'value'
-
-
-def test_user_settings_creates_missing_directory(monkeypatch, tmp_path):
-    """Constructor should create a settings folder when it does not exist."""
+def settings_home(monkeypatch, tmp_path):
+    """Redirect user settings into an isolated temporary home folder."""
     monkeypatch.setattr(
         JsonUserSettings,
         'os_user_folder',
         property(lambda self: str(tmp_path)),
     )
+    return tmp_path
 
+
+def test_json_user_settings(settings_home):
+    """Make sure folder does not exist."""
+    js = JsonUserSettings(FOLDER, 'user')
+    assert Path(js.filepath).parent == settings_home / FOLDER
+    assert settings_home.is_dir()
+    assert isinstance(js.user_data, dict)
+
+    js.filename = 'random_file'
+    assert js.load_settings() is False
+
+
+def test_json_settings_save(settings_home):
+    """Test json settings: save."""
+    js = JsonUserSettings(FOLDER, 'tox')
+    data = {'age': 99}
+    assert js.save_settings(data)
+    assert Path(js.filepath).is_file()
+
+    js = JsonUserSettings(FOLDER, 'tox')
+    data = js.load_settings()
+    assert isinstance(data, dict)
+    assert data['age'] == 99
+
+    js.user_data = {'custom': 'value'}
+    assert js.save_settings()
+    data = js.load_settings()
+    assert isinstance(data, dict)
+    assert data['custom'] == 'value'
+    assert Path(js.filepath).parent == settings_home / FOLDER
+
+
+def test_user_settings_creates_missing_directory(settings_home):
+    """Constructor should create a settings folder when it does not exist."""
     folder_name = 'new_settings_folder'
-    target_dir = tmp_path / folder_name
+    target_dir = settings_home / folder_name
 
     assert target_dir.exists() is False
     js = JsonUserSettings(folder_name, 'user')
 
     assert target_dir.exists() is True
-    assert os.path.exists(os.path.dirname(js.filepath)) is True
+    assert Path(js.filepath).parent == target_dir

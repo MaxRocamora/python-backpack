@@ -6,10 +6,15 @@
 import random
 import string
 import time
+from functools import wraps
+from typing import Callable, ParamSpec, TypeVar
 
 from backpack.logger import get_logger
 
 log = get_logger('Python Backpack - TestUtils')
+
+P = ParamSpec('P')
+R = TypeVar('R')
 
 
 def random_string(length: int = 10) -> str:
@@ -26,13 +31,14 @@ def random_string(length: int = 10) -> str:
     return ''.join(random.choice(letters) for _ in range(length))
 
 
-def time_function_decorator(method: type):
+def time_function_decorator(method: Callable[P, R]) -> Callable[P, R]:
     """Decorator to measure methods execution time."""
 
-    def timed(*args, **kw):
-        ts = time.time()
+    @wraps(method)
+    def timed(*args: P.args, **kw: P.kwargs) -> R:
+        ts = time.perf_counter()
         result = method(*args, **kw)
-        te = time.time()
+        te = time.perf_counter()
 
         message = f'{method.__name__!r}  {(te - ts) * 1000:2.2f} ms'
         log.info(message)

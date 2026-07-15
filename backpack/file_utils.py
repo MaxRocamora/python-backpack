@@ -4,14 +4,18 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import contextlib
+from collections.abc import Sequence
 
 from backpack.logger import get_logger
 
 log = get_logger('Python Backpack - FileUtils')
 
 
-def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> None:
+def replace_strings_in_file(
+    ascii_file: str,
+    strings: Sequence[str],
+    new_string: str,
+) -> None:
     """Opens ascii file and replaces all occurrences from strings into new_string.
 
     In this class we use a full path to avoid use of os.dirname, which
@@ -28,7 +32,7 @@ def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> 
 
     log.info(f'Replacing Strings, Opening File: {ascii_file}')
 
-    with open(ascii_file) as f:
+    with open(ascii_file, newline='') as f:
         file_data = f.read()
         for i in strings:
             log.info('Finding: %s', i)
@@ -36,13 +40,16 @@ def replace_strings_in_file(ascii_file: str, strings: list, new_string: str) -> 
             log.info('-' * 50)
             file_data = file_data.replace(i, new_string)
 
-    with open(ascii_file, 'w') as f:
+    with open(ascii_file, 'w', newline='') as f:
         f.write(file_data)
-        f.close()
         log.info(f'Closing File: {ascii_file}')
 
 
-def remove_line_from_file(ascii_file: str, strings: list, verbose: bool = False) -> None:
+def remove_line_from_file(
+    ascii_file: str,
+    strings: Sequence[str],
+    verbose: bool = False,
+) -> None:
     """Removes given lines from ascii file.
 
     Args:
@@ -51,21 +58,22 @@ def remove_line_from_file(ascii_file: str, strings: list, verbose: bool = False)
         verbose: (bool) if true, prints removed lines
     """
 
-    with open(ascii_file) as f:
-        file_content = f.read().splitlines()
+    retained_lines = []
+    with open(ascii_file, newline='') as f:
+        file_content = f.readlines()
 
     for line in file_content:
+        value = line.rstrip('\r\n')
         if verbose:
-            log.info(f'Checking line: {line}')
-        with contextlib.suppress(ValueError):
-            if line in strings:
-                if verbose:
-                    log.info(f'Removing line: {line}')
-                file_content.pop(file_content.index(line))
+            log.info(f'Checking line: {value}')
+        if value in strings:
+            if verbose:
+                log.info(f'Removing line: {value}')
+        else:
+            retained_lines.append(line)
 
-    with open(ascii_file, 'w') as f:
-        contents = '\n'.join(file_content)
-        f.write(contents)
+    with open(ascii_file, 'w', newline='') as f:
+        f.writelines(retained_lines)
 
 
 def file_is_writeable(filepath: str) -> bool:

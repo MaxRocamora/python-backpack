@@ -5,16 +5,33 @@
 # ----------------------------------------------------------------------------------------
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache, wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, Protocol, TypeVar, cast
 
 from backpack.logger import get_logger
 
 log = get_logger('Python Backpack - Cache')
 
-F = TypeVar('F', bound=Callable[..., Any])
+R = TypeVar('R', covariant=True)
 
 
-def timed_lru_cache(seconds: int, maxsize: int = 128) -> Callable[[F], F]:
+class TimedCachedCallable(Protocol[R]):
+    """Callable returned by timed_lru_cache with cache control kwargs."""
+
+    def __call__(
+        self,
+        *args: Any,
+        force_clear: bool = False,
+        show_log: bool = False,
+        **kwargs: Any,
+    ) -> R:
+        """Call the cached function, optionally forcing a cache clear first."""
+        ...
+
+
+def timed_lru_cache(
+    seconds: int,
+    maxsize: int = 128,
+) -> Callable[[Callable[..., R]], TimedCachedCallable[R]]:
     """Lru_cache with expiration time.
 
     Args:
@@ -39,13 +56,18 @@ def timed_lru_cache(seconds: int, maxsize: int = 128) -> Callable[[F], F]:
 
     """
 
-    def wrapper_cache(func: F) -> F:
+    def wrapper_cache(func: Callable[..., R]) -> TimedCachedCallable[R]:
         cached_func = cast(Any, lru_cache(maxsize=maxsize)(func))
         cached_func.lifetime = timedelta(seconds=seconds)
         cached_func.expiration = datetime.now(timezone.utc) + cached_func.lifetime
 
         @wraps(func)
-        def wrapped_func(*args, force_clear: bool = False, show_log: bool = False, **kwargs):
+        def wrapped_func(
+            *args: Any,
+            force_clear: bool = False,
+            show_log: bool = False,
+            **kwargs: Any,
+        ) -> R:
             """Wrapper function for lru_cache with expiration time.
 
             Args:
@@ -66,6 +88,6 @@ def timed_lru_cache(seconds: int, maxsize: int = 128) -> Callable[[F], F]:
 
             return cached_func(*args, **kwargs)
 
-        return cast(F, wrapped_func)
+        return cast(TimedCachedCallable[R], wrapped_func)
 
     return wrapper_cache

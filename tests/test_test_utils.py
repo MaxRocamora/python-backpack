@@ -4,21 +4,13 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import os
-import sys
-import time
-
 from backpack.test_utils import random_string, time_function_decorator
-
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
 
 
 @time_function_decorator
-def one_second_delay():
-    """One second delay to test time_function_decorator."""
-    time.sleep(1)
+def decorated_double(value: int) -> int:
+    """Double a value for decorator behavior tests."""
+    return value * 2
 
 
 def test_random_string():
@@ -30,6 +22,12 @@ def test_random_string():
     assert len(r) == 0
 
 
-def test_delay():
-    """Testing time_function_decorator."""
-    one_second_delay()
+def test_time_function_decorator_preserves_return_value():
+    """Return the wrapped function's result unchanged."""
+    assert decorated_double(4) == 8
+
+
+def test_time_function_decorator_preserves_metadata():
+    """Expose the wrapped function's name and docstring."""
+    assert decorated_double.__name__ == 'decorated_double'
+    assert decorated_double.__doc__ == 'Double a value for decorator behavior tests.'

@@ -4,7 +4,6 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import contextlib
 import re
 
 
@@ -29,30 +28,25 @@ def normalize_input_string(
         str: reformatted string
     """
 
-    # re-encode string to valid chars
-    with contextlib.suppress(UnicodeDecodeError):
-        regex = re.sub('[^A-Za-z0-9 _-]+', '', input_string)
-
-    for char in regex:
-        # replacing " " for replacer
-        if under_spaces and char == ' ':
-            regex = regex.replace(' ', replacer)
-
-        # replacing "-" for replacer
-        if under_hyphen and char == '-':
-            regex = regex.replace('-', replacer)
+    regex = re.sub(r'[^A-Za-z0-9 _-]+', '', input_string)
+    if under_spaces:
+        regex = regex.replace(' ', replacer)
+    if under_hyphen:
+        regex = regex.replace('-', replacer)
 
     return regex
 
 
 def begin_or_end_with_numbers(input_string: str) -> bool:
     """Returns true if the input string begins or ends with number."""
-    return _char_is_number(input_string[0]) or _char_is_number(input_string[-1])
+    return bool(input_string) and (
+        _char_is_number(input_string[0]) or _char_is_number(input_string[-1])
+    )
 
 
 def begin_with_number(input_string: str) -> bool:
     """Returns true if the input string begins with numbers."""
-    return _char_is_number(input_string[0])
+    return bool(input_string) and _char_is_number(input_string[0])
 
 
 def has_numbers(input_string: str) -> bool:

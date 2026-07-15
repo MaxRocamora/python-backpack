@@ -27,7 +27,7 @@ class JsonUserSettings:
             folder (str): name of sub folder inside user path. Defaults to 'json_settings'.
             name (str): name used for the json file. Defaults to 'user_data'.
         """
-        self.name = name
+        self.filename = name
         self.folder = folder
         self._user_data = {}
         self._verify_path()
@@ -35,7 +35,7 @@ class JsonUserSettings:
     @property
     def filepath(self) -> str:
         """Returns user filepath."""
-        path = os.path.join(self.os_user_folder, self.folder, f'{self.name}.json')
+        path = os.path.join(self.os_user_folder, self.folder, f'{self.filename}.json')
         return os.path.abspath(path)
 
     @property
@@ -60,14 +60,14 @@ class JsonUserSettings:
 
         return True
 
-    def save_settings(self, data: dict | None = None) -> bool | None:
+    def save_settings(self, data: dict | None = None) -> bool:
         """Saves a dictionary into a json file (os user path).
 
         Args:
-            data (dictionary): info dictionary to save, if not provided,
+            data (dict): info dictionary to save, if not provided,
                 saves instead local self.user_data property
         Returns:
-            bool | None: True if file was saved, False if error, None if no data to save.
+            bool: True if the file was saved, otherwise False.
         """
         if data is None:
             data = self.user_data

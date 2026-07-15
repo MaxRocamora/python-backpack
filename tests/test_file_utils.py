@@ -4,10 +4,6 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
-import os
-import shutil
-import sys
-
 import pytest
 
 from backpack.file_utils import (
@@ -17,38 +13,57 @@ from backpack.file_utils import (
     replace_strings_in_file,
 )
 
-mod_path = os.path.dirname(__file__)
-if mod_path not in sys.path:
-    sys.path.append(mod_path)
-
-# test folders
-BASE_FILE = os.path.join(mod_path, 'test_files', 'origin.txt')
-EDITED_FILE = os.path.join(mod_path, 'test_files', 'edited.txt')
 STRINGS = ['to be replaced!', 'also replaced']
 NEW_STRING = 'REPLACED'
-LOCKED_FILE = os.path.join(mod_path, 'test_files', 'locked_file.txt')
-UNLOCKED_FILE = os.path.join(mod_path, 'test_files', 'unlocked_file.txt')
-NO_FILE = os.path.join(mod_path, 'test_files', 'no_file.txt')
 
 
-def test_replace_strings_in_file():
-    """Testing module."""
-    shutil.copy(BASE_FILE, EDITED_FILE)
-    replace_strings_in_file(EDITED_FILE, STRINGS, NEW_STRING)
+def test_replace_strings_in_file(tmp_path):
+    """Replace every configured string and preserve unrelated content."""
+    test_file = tmp_path / 'replace.txt'
+    test_file.write_text('keep\nto be replaced!\nalso replaced\n')
+
+    replace_strings_in_file(str(test_file), STRINGS, NEW_STRING)
+
+    assert test_file.read_text() == 'keep\nREPLACED\nREPLACED\n'
 
 
-def test_remove_line_from_file():
-    """Testing module."""
-    source_file = os.path.join(mod_path, 'test_files', 'origin_remove.txt')
-    test_file = os.path.join(mod_path, 'test_files', 'edited_remove.txt')
-    shutil.copy(source_file, test_file)
-    remove_line_from_file(test_file, ['REMOVE_ME', 'to be replaced!'], verbose=True)
+def test_remove_line_from_file(tmp_path):
+    """Remove exact matching lines and retain other lines."""
+    test_file = tmp_path / 'remove.txt'
+    test_file.write_text('keep\nREMOVE_ME\nstay')
+
+    remove_line_from_file(str(test_file), ['REMOVE_ME'], verbose=True)
+
+    assert test_file.read_text() == 'keep\nstay'
 
 
-def test_locked_file():
-    """Testing module."""
-    assert file_is_writeable(UNLOCKED_FILE)
-    assert not file_is_writeable(NO_FILE)
+def test_remove_line_from_file_removes_adjacent_matches(tmp_path):
+    """Remove adjacent targets, including duplicate exact matches."""
+    test_file = tmp_path / 'duplicates.txt'
+    test_file.write_text('REMOVE_ME\nREMOVE_ME\nALSO_REMOVE\nkeep')
+
+    remove_line_from_file(str(test_file), ['REMOVE_ME', 'ALSO_REMOVE'])
+
+    assert test_file.read_text() == 'keep'
+
+
+def test_remove_line_from_file_preserves_line_endings(tmp_path):
+    """Preserve mixed line endings on retained lines."""
+    test_file = tmp_path / 'line_endings.txt'
+    test_file.write_bytes(b'keep\r\nREMOVE_ME\r\nstay\n')
+
+    remove_line_from_file(str(test_file), ['REMOVE_ME'])
+
+    assert test_file.read_bytes() == b'keep\r\nstay\n'
+
+
+def test_file_is_writeable(tmp_path):
+    """Report existing writable files and reject missing files."""
+    existing_file = tmp_path / 'existing.txt'
+    existing_file.write_text('content')
+
+    assert file_is_writeable(str(existing_file))
+    assert not file_is_writeable(str(tmp_path / 'missing.txt'))
 
 
 @pytest.mark.parametrize(

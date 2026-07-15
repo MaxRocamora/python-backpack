@@ -7,27 +7,37 @@
 import os
 import shutil
 import subprocess
+from collections.abc import Sequence
 
 from backpack.logger import get_logger
 
 log = get_logger('Python Backpack - FolderUtils')
 
 
-def browse_folder(folder: str) -> bool:
+def browse_folder(folder: str | None) -> bool:
     """Open windows explorer on folder.
 
     Args:
         folder: (string path) folder to open
     """
     if folder and os.path.isdir(folder):
-        subprocess.Popen(f'explorer {os.path.abspath(folder)}')
-        return True
+        try:
+            subprocess.Popen(['explorer', os.path.abspath(folder)])
+            return True
+        except OSError as error:
+            log.warning(f'Unable to open folder {folder}')
+            log.error(str(error))
+            return False
 
     log.warning(f'Unable to open folder {folder}')
     return False
 
 
-def create_folders(folders: list, force_empty: bool = False, verbose: bool = False):
+def create_folders(
+    folders: Sequence[str],
+    force_empty: bool = False,
+    verbose: bool = False,
+) -> None:
     """Creates multiple folders on disc.
 
     Args:
@@ -39,7 +49,7 @@ def create_folders(folders: list, force_empty: bool = False, verbose: bool = Fal
         create_folder(folder, force_empty=force_empty, verbose=verbose)
 
 
-def create_folder(path: str, force_empty: bool = False, verbose: bool = True):
+def create_folder(path: str, force_empty: bool = False, verbose: bool = True) -> bool:
     """Creates a folder.
 
     Args:
@@ -63,7 +73,7 @@ def create_folder(path: str, force_empty: bool = False, verbose: bool = True):
     return True
 
 
-def remove_files_in_dir(path: str):
+def remove_files_in_dir(path: str) -> None:
     """Clears all content in given directory."""
     for root, dirs, files in os.walk(path):
         for f in files:
@@ -72,7 +82,7 @@ def remove_files_in_dir(path: str):
             shutil.rmtree(os.path.join(root, d))
 
 
-def recursive_dir_copy(source_path: str, target_path: str):
+def recursive_dir_copy(source_path: str, target_path: str) -> None:
     """Copy all files src dir to dest dir, including sub-directories.
 
     Args:
