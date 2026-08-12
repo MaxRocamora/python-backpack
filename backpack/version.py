@@ -11,10 +11,11 @@
 # 1.1.4 07/2025 - Moved from pipenv to poetry for dependency management.toml
 # 2.0.1 05/2026 - Remove tox workflow and setup.py, standardize uv + coverage tooling
 # 2.0.2 05/2026 - Add PyPI long description metadata and release polish
-# 2.0.3 06/2026 - Add type hints to backpack.cache, backpack.folder_utils, backpack.json_user_settings, backpack.json_utils, and backpack.logger, refactor backpack.cache to use functools.lru_cache, and add tests for backpack.cache and backpack.folder_utils.
+# 2.0.3 06/2026 - Add type hints, refactor backpack.cache to use functools.lru_cache, added tests.
+# 2.0.4 08/2026 - Fixed get_version_from_filename().
 # ----------------------------------------------------------------------------------------
 
-__version__ = '2.0.3'
+__version__ = '2.0.4'
 
 VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH = map(int, __version__.split('.'))
 
