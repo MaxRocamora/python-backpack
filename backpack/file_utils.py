@@ -4,6 +4,7 @@
 # https://github.com/MaxRocamora/python-backpack
 # ----------------------------------------------------------------------------------------
 
+import re
 from collections.abc import Sequence
 
 from backpack.logger import get_logger
@@ -94,11 +95,12 @@ def file_is_writeable(filepath: str) -> bool:
     return False
 
 
-def get_version_from_filename(filename: str) -> str:
+def get_version_from_filename(filename: str, separator: str | None = None) -> str:
     """Extracts version from filename.
 
     Args:
         filename: (str) file name to extract version from
+        separator: delimiter that must precede the version; when omitted, use supported delimiters
     Returns:
         str : version extracted from filename
 
@@ -107,29 +109,32 @@ def get_version_from_filename(filename: str) -> str:
         get_version_from_filename('myfile-9.txt') -> '9'
         get_version_from_filename('myfile.130.txt') -> '130'
         get_version_from_filename('myfile_v1002.txt') -> '1002'
+        get_version_from_filename('XD_shot_0000.0003.ma') -> '0003'
+        get_version_from_filename('ANM_shot_0010.0003.ma') -> '0003'
 
     """
 
     filename_no_ext = filename.rsplit('.', 1)[0]
 
-    # guess is the separator is an underscore, dash, dot or v, and the version is the last part before the extension
-    separators = ['_', '-', '.', 'v']
-    if not any(sep in filename_no_ext for sep in separators):
-        log.info(f'No separator found in filename: {filename_no_ext}. Using fallback extraction.')
-    else:
-        for sep in separators:
-            if sep in filename_no_ext:
-                parts = filename_no_ext.split(sep)
-                version_part = parts[-1].split('.')[0]  # Get the last part before the extension
-                if version_part.replace('.', '').isdigit():  # Check if it's a valid version number
-                    log.info(
-                        f'Extracted version: {version_part} from filename: {filename} using separator: {sep}'
-                    )
-                    return version_part
+    if separator is not None:
+        if not separator:
+            raise ValueError('separator must not be empty')
 
-    # Fallback: extract from the entire filename
-    version = filename_no_ext.lstrip('v')
-    version = version.replace('_', '.').replace('-', '.')
-    version = version if version.replace('.', '').isdigit() else '0'
-    log.info(f'Extracted version: {version} from filename: {filename}')
-    return version
+        version = filename_no_ext.rsplit(separator, 1)[-1]
+        if version.isdigit():
+            log.info(
+                f'Extracted version: {version} from filename: {filename} using separator: {separator}'
+            )
+            return version
+
+        log.info(f'No numeric version found in filename: {filename} using separator: {separator}')
+        return '0'
+
+    match = re.search(r'(?:^|[_.-])v?(\d+)$', filename_no_ext)
+    if match:
+        version = match.group(1)
+        log.info(f'Extracted version: {version} from filename: {filename}')
+        return version
+
+    log.info(f'No numeric version found in filename: {filename}')
+    return '0'

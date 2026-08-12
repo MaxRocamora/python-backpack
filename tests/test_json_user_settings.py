@@ -65,3 +65,11 @@ def test_user_settings_creates_missing_directory(settings_home):
 
     assert target_dir.exists() is True
     assert Path(js.filepath).parent == target_dir
+
+
+def test_os_user_folder_returns_home_directory(monkeypatch):
+    """The unpatched property should resolve the current user's home directory."""
+    monkeypatch.undo()
+    settings = object.__new__(JsonUserSettings)
+
+    assert settings.os_user_folder == str(Path.home())

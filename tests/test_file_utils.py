@@ -79,8 +79,31 @@ def test_file_is_writeable(tmp_path):
         ('myfile.txt', '0'),
         ('mod_asset.1004.ma', '1004'),
         ('script_nuke_s100_v1005.ma', '1005'),
+        ('XD_shot_0000.0003.ma', '0003'),
+        ('ANM_shot_0010.0003.ma', '0003'),
     ],
 )
 def test_get_version_from_filename(filename: str, expected_version: str):
     """Version extraction should handle supported separators and invalid values."""
     assert get_version_from_filename(filename) == expected_version
+
+
+@pytest.mark.parametrize(
+    ('filename', 'separator', 'expected_version'),
+    [
+        ('XD_shot_0000.0003.ma', '.', '0003'),
+        ('XD_shot_0000.0003.ma', '_', '0'),
+        ('myfile_v1002.txt', 'v', '1002'),
+    ],
+)
+def test_get_version_from_filename_with_separator(
+    filename: str, separator: str, expected_version: str
+):
+    """An explicit separator constrains version extraction to its final token."""
+    assert get_version_from_filename(filename, separator) == expected_version
+
+
+def test_get_version_from_filename_rejects_empty_separator():
+    """An empty separator is not a meaningful version delimiter."""
+    with pytest.raises(ValueError, match='separator must not be empty'):
+        get_version_from_filename('myfile_23.txt', '')
