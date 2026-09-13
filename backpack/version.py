@@ -13,9 +13,10 @@
 # 2.0.2 05/2026 - Add PyPI long description metadata and release polish
 # 2.0.3 06/2026 - Add type hints, refactor backpack.cache to use functools.lru_cache, added tests.
 # 2.0.4 08/2026 - Fixed get_version_from_filename().
+# 2.0.5 09/2026 - Add PyPI publish workflow.
 # ----------------------------------------------------------------------------------------
 
-__version__ = '2.0.4'
+__version__ = '2.0.5'
 
 VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH = map(int, __version__.split('.'))
 
